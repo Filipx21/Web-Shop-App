@@ -1,27 +1,24 @@
 package pl.filip.tosql.config;
 
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.web.servlet.config.annotation.CorsRegistry;
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 
 @Configuration
 public class ApplicationConfig {
 
 //    @Bean
-//    public PasswordEncoder passwordEncoder() {
-//        return new BCryptPasswordEncoder();
+//    public Formatter<LocalDate> localDateFormatter() {
+//        return new Formatter<>() {
+//            @Override
+//            public String print(LocalDate object, Locale locale) {
+//                return DateTimeFormatter.ISO_DATE.format(object);
+//            }
+//
+//            @Override
+//            public LocalDate parse(String text, Locale locale) {
+//                return LocalDate.parse(text, DateTimeFormatter.ISO_DATE);
+//            }
+//        };
 //    }
 
-    @Bean
-    public WebMvcConfigurer corsConfigurer() {
-        return new WebMvcConfigurerAdapter() {
-            @Override
-            public void addCorsMappings(CorsRegistry registry) {
-                registry.addMapping("/**");
-            }
-        };
-    }
 
 }

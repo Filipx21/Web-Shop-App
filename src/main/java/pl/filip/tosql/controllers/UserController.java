@@ -1,5 +1,5 @@
 package pl.filip.tosql.controllers;
 
-public class ProductController {
+public class UserController {
 
 }

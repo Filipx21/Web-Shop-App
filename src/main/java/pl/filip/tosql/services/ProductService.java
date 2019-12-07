@@ -1,15 +1,11 @@
 package pl.filip.tosql.services;
 
-
 import org.springframework.stereotype.Service;
 import pl.filip.tosql.model.Product;
 import pl.filip.tosql.repositories.ProductRepository;
 
-import java.util.List;
-import java.util.Optional;
-
 @Service
-public class ProductService{
+public class ProductService {
 
     private ProductRepository productRepository;
 
@@ -17,28 +13,19 @@ public class ProductService{
         this.productRepository = productRepository;
     }
 
-    public List<Product> findAllProducts(){
-        return productRepository.findAll();
+    public void saveProduct(Product product) {
     }
 
-    public Product findProductById(Long id){
-        Optional<Product> object = productRepository.findById(id);
-        if(object.isPresent()){
-            return object.get();
-        }
-        return null;
+    public void deleteProductById(Long id) {
     }
 
-    public void saveProduct(Product product){
-        productRepository.save(product);
+    public void findAllProduct() {
     }
 
-    public Product editProduct(Product product){
-        return null;
+    public void findById(Long id) {
     }
 
-    public void deleteProductById(Long id){
-        productRepository.deleteById(id);
+    public void editProduct(Product product) {
     }
 
 }
