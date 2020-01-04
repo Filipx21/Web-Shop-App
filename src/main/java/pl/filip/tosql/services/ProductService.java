@@ -4,6 +4,10 @@ import org.springframework.stereotype.Service;
 import pl.filip.tosql.model.Product;
 import pl.filip.tosql.repositories.ProductRepository;
 
+import java.time.LocalDate;
+import java.util.List;
+import java.util.Optional;
+
 @Service
 public class ProductService {
 
@@ -13,19 +17,40 @@ public class ProductService {
         this.productRepository = productRepository;
     }
 
-    public void saveProduct(Product product) {
+    public Product saveProduct(Product product) {
+        Product copy = product;
+        if(copy != null){
+            if(copy.getCreate() != null){
+                copy.setCreate(LocalDate.now());
+            }
+            return productRepository.save(copy);
+        }
+        return null;
     }
 
     public void deleteProductById(Long id) {
+        productRepository.deleteById(id);
     }
 
-    public void findAllProduct() {
+    public List<Product> findAllProduct() {
+        return productRepository.findAll();
     }
 
-    public void findById(Long id) {
+    public Product findById(Long id) {
+        Optional<Product> object = productRepository.findById(id);
+        return object.orElse(null);
     }
 
-    public void editProduct(Product product) {
+    public List<Product> findProductsByName(String productName){
+        String upperCase = productName.substring(0, 1).toUpperCase() + productName.substring(1);
+        String lowerCase = productName.substring(0, 1).toLowerCase() + productName.substring(1);
+        List<Product> products = productRepository.findAllByProductName(upperCase);
+        products.addAll(productRepository.findAllByProductName(lowerCase));
+        if(products.isEmpty()) {
+            return null;
+        } else {
+            return products;
+        }
     }
 
 }

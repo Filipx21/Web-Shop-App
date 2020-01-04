@@ -1,24 +1,15 @@
 package pl.filip.tosql.model;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.validation.constraints.Min;
+import javax.persistence.*;
 
 @Entity
-public class UserRole {
+public class Role {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
-    @Min(5)
-    @Column(unique = true, nullable = false, length = 30)
+    @Column(unique = true)
     private String username;
-
-    @Column(nullable = false)
     private String role;
 
     public Long getId() {
@@ -44,5 +35,4 @@ public class UserRole {
     public void setRole(String role) {
         this.role = role;
     }
-
 }

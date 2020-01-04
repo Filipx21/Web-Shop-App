@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+      xmlns="http://www.w3.org/1999/xhtml"
+      lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>City</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
+          integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" href="/style.css">
+</head>
+<body>
+
+<div th:insert="~{fragments :: header}"></div>
+
+<div class="content">
+    <div class="content-product">
+        <div class="content-product-details">
+            <div class="content-product-picture"></div>
+            <div class="content-product-details-info">
+                <h1 th:text="${product_details.productName}"></h1>
+                <span th:text="'Cena produktu: ' + ${product_details.cost} + 'zł'"></span>
+                <span th:text="'Ilość dostepnych sztuk: ' + ${product_details.quantity}"></span>
+                <span th:text="'Producent: ' + ${product_details.producer.producerName}"></span>
+                <div class="content-product-details-info-buttons">
+                    <div sec:authorize="isAuthenticated()">
+                        <a class="btn content-product-details-info-buttons-button" th:href="'/addToCart/' + ${product_details.id}">
+                            Dodaj do koszyka
+                        </a>
+                    </div>
+                    <div sec:authorize="isAuthenticated()">
+                        <a class="btn content-product-details-info-buttons-button" href="/#">
+                            Kup produkt
+                        </a>
+                    </div>
+                    <div sec:authorize="isAuthenticated()">
+                        <a class="btn content-product-details-info-buttons-button" href="/#">
+                            Wiecej o producencie
+                        </a>
+                    </div>
+                    <div sec:authorize="${hasRole('ROLE_ADMIN')}">
+                        <a class="btn content-product-details-info-buttons-button-admin"
+                           th:href="'/edit_product/' + ${product_details.id}">
+                            Edytuj produkt
+                        </a>
+                    </div>
+                    <div sec:authorize="${hasRole('ROLE_ADMIN')}">
+                        <a class="btn content-product-details-info-buttons-button-admin"
+                           th:href="'/delete_product/' + ${product_details.id}">
+                            Usuń produkt
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div style="width: 98%; margin: 1% 3%;">
+            <h3>Opis produktu</h3>
+            <span th:text="${product_details.descript}"></span>
+        </div>
+    </div>
+</div>
+
+
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+        integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+        crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"
+        integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49"
+        crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"
+        integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy"
+        crossorigin="anonymous"></script>
+</body>
+</html>

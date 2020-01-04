@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <meta charset="UTF-8">
+        <title>Registration</title>
+        <meta charset="UTF-8">
+        <title>City</title>
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+        <link rel="stylesheet" type="text/css" href="/style.css">
+    </head>
+    <body>
+        <div th:insert="~{fragments :: header}"></div>
+        <div style="width: 500px; height: 100%; margin: auto; margin-top: 10px; margin-bottom: 10%; text-align:center">
+            <div style="width: 500px; margin: auto; margin-top: 10px; text-align:center">
+                <h1>Rejestracja</h1>
+            </div>
+            <form th:action="@{/newRegistration}" method="post" th:object="${registration_user}">
+                <div class="form-group">
+                    <label for="username">Nazwa użytkownika</label>
+                    <input type="text" th:field="*{username}" class="form-control" id="username" placeholder="Podaj nazwę" required="true">
+                </div>
+                <div class="form-group">
+                    <label for="firstName">Imie</label>
+                    <input type="text" th:field="*{firstName}" class="form-control" id="firstName" placeholder="Podaj imię" required="true">
+                </div>
+                <div class="form-group">
+                    <label for="lastName">Nazwisko</label>
+                    <input type="text" th:field="*{lastName}" class="form-control" id="lastName" placeholder="Podaj nazwisko" required="true">
+                </div>
+                <div class="form-group">
+                    <label for="email">Adres e-mail</label>
+                    <input type="email" th:field="*{email}" class="form-control" id="email"  placeholder="Podaj email" required="true">
+                </div>
+                <div class="form-group">
+                    <label for="password">Hasło</label>
+                    <input type="password" th:field="*{password}" class="form-control" id="password" placeholder="Podaj hasło" required="true">
+                </div>
+                <input type="submit" value="Zarejestruj" class="btn btn-dark"/>
+            </form>
+        </div>
+
+        <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+    </body>
+</html>

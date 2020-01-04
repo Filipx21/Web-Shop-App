@@ -1,15 +1,10 @@
 package pl.filip.tosql.model;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.List;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.OneToMany;
+import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
-import org.springframework.format.annotation.DateTimeFormat;
 
 @Entity
 public class Producer {
@@ -19,16 +14,33 @@ public class Producer {
     private Long id;
 
     @NotEmpty
-    private String name;
+    private String producerName;
 
     @NotEmpty
-    private String addres;
+    private String address;
 
-    @DateTimeFormat(pattern = "dd-MM-yyyy")
-    private LocalDateTime create;
+    public Long getId() {
+        return id;
+    }
 
-    @OneToMany(fetch = FetchType.LAZY,
-        mappedBy = "producer")
-    private List<Product> product;
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getProducerName() {
+        return producerName;
+    }
+
+    public void setProducerName(String producerName) {
+        this.producerName = producerName;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
 
 }
