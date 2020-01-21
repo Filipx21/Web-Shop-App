@@ -2,15 +2,16 @@ package pl.filip.shop.repositories;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
-import pl.filip.shop.model.User;
 
 import java.util.Optional;
+
+import pl.filip.shop.model.User;
 
 @Repository
 public interface UserRepository extends JpaRepository<User, Long> {
 
-    User findByEmail(String email);
+    Optional<User> findByEmail(String email);
 
-    Optional<User> findByUsername(String username);
+    Optional<User> findByUserName(String username);
 
 }

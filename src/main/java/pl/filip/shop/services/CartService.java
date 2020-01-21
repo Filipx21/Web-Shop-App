@@ -29,7 +29,7 @@ public class CartService {
     }
 
     public Cart addToCart(Long id, String username) {
-        Optional<User> userObj = userRepository.findByUsername(username);
+        Optional<User> userObj = userRepository.findByUserName(username);
         Optional<Product> productObj = productRepository.findById(id);
         User user;
         Product product;
@@ -69,7 +69,7 @@ public class CartService {
     }
 
     public List<ProductInOrder> productsInCart(String username) {
-        Optional<User> userObj = userRepository.findByUsername(username);
+        Optional<User> userObj = userRepository.findByUserName(username);
         List<Cart> objCart;
         if (!userObj.isPresent()) {
             throw new NullPointerException("Object doesn't exist");
@@ -86,7 +86,7 @@ public class CartService {
     }
 
     public Cart deleteProductFromCart(Long id, String username) {
-        Optional<User> userObj = userRepository.findByUsername(username);
+        Optional<User> userObj = userRepository.findByUserName(username);
         User user;
 
         if (!userObj.isPresent()) {
@@ -110,7 +110,7 @@ public class CartService {
     }
 
     public Cart clean(String username) {
-        Optional<User> userObj = userRepository.findByUsername(username);
+        Optional<User> userObj = userRepository.findByUserName(username);
         if (userObj.isPresent()) {
             List<Cart> carts = cartRepository.findAllByUserAndInUse(userObj.get(), true);
             if (carts.size() > 1) {
