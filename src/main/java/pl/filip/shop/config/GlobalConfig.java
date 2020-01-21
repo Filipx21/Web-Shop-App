@@ -1,4 +1,4 @@
-package pl.filip.tosql.config;
+package pl.filip.shop.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -6,7 +6,7 @@ import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 @Configuration
-public class ApplicationConfig {
+public class GlobalConfig {
 
     @Bean
     public PasswordEncoder passwordEncoder() {

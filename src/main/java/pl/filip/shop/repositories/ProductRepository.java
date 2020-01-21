@@ -1,8 +1,8 @@
-package pl.filip.tosql.repositories;
+package pl.filip.shop.repositories;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
-import pl.filip.tosql.model.Product;
+import pl.filip.shop.model.Product;
 
 import java.util.List;
 import java.util.Optional;

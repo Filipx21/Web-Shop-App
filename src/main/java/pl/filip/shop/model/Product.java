@@ -1,15 +1,25 @@
-package pl.filip.tosql.model;
+package pl.filip.shop.model;
 
-import javax.persistence.*;
+import javax.persistence.CascadeType;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.OneToOne;
+import javax.persistence.OneToMany;
+
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+
 import java.math.BigDecimal;
+
 import java.time.LocalDate;
 
 @Entity
-public class ProductInOrder {
+public class Product {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -30,26 +40,10 @@ public class ProductInOrder {
     @Min(0)
     private BigDecimal cost;
 
-    @NotEmpty
-    private String producerName;
-
-    @NotEmpty
-    private String address;
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private Producer producer;
 
     private LocalDate create;
-
-    public ProductInOrder() {
-    }
-
-    public ProductInOrder(Product product) {
-        this.productName = product.getProductName();
-        this.descript = product.getDescript();
-        this.quantity = product.getQuantity();
-        this.cost = product.getCost();
-        this.producerName = product.getProducer().getProducerName();
-        this.address = product.getProducer().getAddress();
-        this.create = product.getCreate();
-    }
 
     public Long getId() {
         return id;
@@ -91,20 +85,12 @@ public class ProductInOrder {
         this.cost = cost;
     }
 
-    public String getProducerName() {
-        return producerName;
+    public Producer getProducer() {
+        return producer;
     }
 
-    public void setProducerName(String producerName) {
-        this.producerName = producerName;
-    }
-
-    public String getAddress() {
-        return address;
-    }
-
-    public void setAddress(String address) {
-        this.address = address;
+    public void setProducer(Producer producer) {
+        this.producer = producer;
     }
 
     public LocalDate getCreate() {
@@ -113,19 +99,5 @@ public class ProductInOrder {
 
     public void setCreate(LocalDate create) {
         this.create = create;
-    }
-
-    @Override
-    public String toString() {
-        return "ProductInOrder{" +
-                "id=" + id +
-                ", productName='" + productName + '\'' +
-                ", descript='" + descript + '\'' +
-                ", quantity=" + quantity +
-                ", cost=" + cost +
-                ", producerName='" + producerName + '\'' +
-                ", address='" + address + '\'' +
-                ", create=" + create +
-                '}';
     }
 }

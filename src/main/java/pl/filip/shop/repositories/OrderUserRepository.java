@@ -1,8 +1,8 @@
-package pl.filip.tosql.repositories;
+package pl.filip.shop.repositories;
 
 import org.springframework.data.jpa.repository.JpaRepository;
-import pl.filip.tosql.model.OrderUser;
-import pl.filip.tosql.model.User;
+import pl.filip.shop.model.OrderUser;
+import pl.filip.shop.model.User;
 
 import java.util.List;
 

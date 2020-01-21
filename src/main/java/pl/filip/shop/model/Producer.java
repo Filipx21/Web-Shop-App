@@ -1,9 +1,10 @@
-package pl.filip.tosql.model;
+package pl.filip.shop.model;
 
-import java.time.LocalDate;
-import java.time.LocalTime;
-import java.util.List;
-import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+
 import javax.validation.constraints.NotEmpty;
 
 @Entity

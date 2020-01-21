@@ -1,8 +1,8 @@
-package pl.filip.tosql.services;
+package pl.filip.shop.services;
 
 import org.springframework.stereotype.Service;
-import pl.filip.tosql.model.Product;
-import pl.filip.tosql.repositories.ProductRepository;
+import pl.filip.shop.model.Product;
+import pl.filip.shop.repositories.ProductRepository;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -19,8 +19,8 @@ public class ProductService {
 
     public Product saveProduct(Product product) {
         Product copy = product;
-        if(copy != null){
-            if(copy.getCreate() != null){
+        if (copy != null) {
+            if (copy.getCreate() != null) {
                 copy.setCreate(LocalDate.now());
             }
             return productRepository.save(copy);
@@ -41,12 +41,12 @@ public class ProductService {
         return object.orElse(null);
     }
 
-    public List<Product> findProductsByName(String productName){
+    public List<Product> findProductsByName(String productName) {
         String upperCase = productName.substring(0, 1).toUpperCase() + productName.substring(1);
         String lowerCase = productName.substring(0, 1).toLowerCase() + productName.substring(1);
         List<Product> products = productRepository.findAllByProductName(upperCase);
         products.addAll(productRepository.findAllByProductName(lowerCase));
-        if(products.isEmpty()) {
+        if (products.isEmpty()) {
             return null;
         } else {
             return products;

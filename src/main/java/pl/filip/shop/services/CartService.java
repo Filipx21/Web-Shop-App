@@ -1,13 +1,13 @@
-package pl.filip.tosql.services;
+package pl.filip.shop.services;
 
 import org.springframework.stereotype.Service;
-import pl.filip.tosql.model.Cart;
-import pl.filip.tosql.model.Product;
-import pl.filip.tosql.model.ProductInOrder;
-import pl.filip.tosql.model.User;
-import pl.filip.tosql.repositories.CartRepository;
-import pl.filip.tosql.repositories.ProductRepository;
-import pl.filip.tosql.repositories.UserRepository;
+import pl.filip.shop.model.Cart;
+import pl.filip.shop.model.Product;
+import pl.filip.shop.model.ProductInOrder;
+import pl.filip.shop.model.User;
+import pl.filip.shop.repositories.CartRepository;
+import pl.filip.shop.repositories.ProductRepository;
+import pl.filip.shop.repositories.UserRepository;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,7 +20,9 @@ public class CartService {
     private ProductRepository productRepository;
     private UserRepository userRepository;
 
-    public CartService(CartRepository cartRepository, ProductRepository productRepository, UserRepository userRepository) {
+    public CartService(CartRepository cartRepository,
+                       ProductRepository productRepository,
+                       UserRepository userRepository) {
         this.cartRepository = cartRepository;
         this.productRepository = productRepository;
         this.userRepository = userRepository;
@@ -38,13 +40,13 @@ public class CartService {
             user = userObj.get();
             product = productObj.get();
         }
-        List<Cart> carts = cartRepository.findAllByUserAndInUse(user,true);
+        List<Cart> carts = cartRepository.findAllByUserAndInUse(user, true);
         return cartRepository.save(checkCart(carts, user, product));
     }
 
     private Cart checkCart(List<Cart> carts, User user, Product product) {
         Cart cart;
-        if(carts.size() > 1) {
+        if (carts.size() > 1) {
             throw new NullPointerException("Occured fatal error");
         } else if (carts.size() < 1) {
             List<ProductInOrder> productsInOrder = new ArrayList<>();
@@ -57,7 +59,7 @@ public class CartService {
         } else {
             cart = carts.get(0);
             List<ProductInOrder> productsInOrder = cart.getProducts();
-            if(productsInOrder.contains(new ProductInOrder(product))){
+            if (productsInOrder.contains(new ProductInOrder(product))) {
                 return null;
             }
             productsInOrder.add(new ProductInOrder(product));
@@ -69,14 +71,14 @@ public class CartService {
     public List<ProductInOrder> productsInCart(String username) {
         Optional<User> userObj = userRepository.findByUsername(username);
         List<Cart> objCart;
-        if (!userObj.isPresent() ) {
+        if (!userObj.isPresent()) {
             throw new NullPointerException("Object doesn't exist");
         } else {
-            objCart = cartRepository.findAllByUserAndInUse(userObj.get(),true);
+            objCart = cartRepository.findAllByUserAndInUse(userObj.get(), true);
         }
-        if(objCart.size() < 1) {
+        if (objCart.size() < 1) {
             return null;
-        } else if (objCart.size() == 1){
+        } else if (objCart.size() == 1) {
             return objCart.get(0).getProducts();
 
         }
@@ -87,19 +89,19 @@ public class CartService {
         Optional<User> userObj = userRepository.findByUsername(username);
         User user;
 
-        if (!userObj.isPresent() ) {
+        if (!userObj.isPresent()) {
             throw new NullPointerException("Object doesn't exist");
         } else {
             user = userObj.get();
         }
         List<Cart> carts = cartRepository.findAllByUserAndInUse(user, true);
-        if(carts.size() > 1) {
+        if (carts.size() > 1) {
             throw new NullPointerException();
         }
         Cart cart = carts.get(0);
         List<ProductInOrder> productsInOrder = cart.getProducts();
-        for (int i = 0; i < productsInOrder.size(); i++){
-            if(productsInOrder.get(i).getId().equals(id)){
+        for (int i = 0; i < productsInOrder.size(); i++) {
+            if (productsInOrder.get(i).getId().equals(id)) {
                 productsInOrder.remove(i);
             }
         }
@@ -109,9 +111,9 @@ public class CartService {
 
     public Cart clean(String username) {
         Optional<User> userObj = userRepository.findByUsername(username);
-        if(userObj.isPresent()){
+        if (userObj.isPresent()) {
             List<Cart> carts = cartRepository.findAllByUserAndInUse(userObj.get(), true);
-            if(carts.size() > 1){
+            if (carts.size() > 1) {
                 throw new NullPointerException();
             }
             Cart cart = carts.get(0);

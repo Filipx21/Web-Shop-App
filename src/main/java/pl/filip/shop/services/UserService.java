@@ -1,13 +1,12 @@
-package pl.filip.tosql.services;
+package pl.filip.shop.services;
 
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import pl.filip.tosql.model.Role;
-import pl.filip.tosql.model.User;
-import pl.filip.tosql.repositories.RoleRepository;
-import pl.filip.tosql.repositories.UserRepository;
+import pl.filip.shop.model.Role;
+import pl.filip.shop.model.User;
+import pl.filip.shop.repositories.RoleRepository;
+import pl.filip.shop.repositories.UserRepository;
 
-import java.security.Principal;
 import java.util.List;
 import java.util.Optional;
 
@@ -26,7 +25,7 @@ public class UserService {
         this.roleRepository = roleRepository;
     }
 
-    public void register(User user){
+    public void register(User user) {
         User newUser = new User();
         newUser.setUsername(user.getUsername());
         newUser.setEmail(user.getEmail());
@@ -54,23 +53,23 @@ public class UserService {
         return null;
     }
 
-    public void editPassword(User user){
+    public void editPassword(User user) {
 
     }
 
-    public User findByUsername(String username){
+    public User findByUsername(String username) {
         Optional<User> object = userRepository.findByUsername(username);
         return object.orElse(null);
     }
 
-    public List<User> findAll(){
+    public List<User> findAll() {
         throw new NullPointerException();
     }
 
 
     public User disableAcc(String username) {
         Optional<User> userObj = userRepository.findByUsername(username);
-        if(userObj.isPresent()){
+        if (userObj.isPresent()) {
             User user = userObj.get();
             user.setEnabled(!user.isEnabled());
             userRepository.save(user);

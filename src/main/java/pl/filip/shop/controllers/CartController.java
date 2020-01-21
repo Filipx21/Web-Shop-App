@@ -1,12 +1,12 @@
-package pl.filip.tosql.controllers;
+package pl.filip.shop.controllers;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import pl.filip.tosql.model.Cart;
-import pl.filip.tosql.model.ProductInOrder;
-import pl.filip.tosql.services.CartService;
+import pl.filip.shop.model.Cart;
+import pl.filip.shop.model.ProductInOrder;
+import pl.filip.shop.services.CartService;
 
 import java.security.Principal;
 import java.util.List;
@@ -21,7 +21,7 @@ public class CartController {
     }
 
     @GetMapping("/getCart")
-    public String cart(Model model, Principal principal){
+    public String cart(Model model, Principal principal) {
         List<ProductInOrder> products = cartService.productsInCart(principal.getName());
         if (products == null) {
             model.addAttribute("cart_products", null);
@@ -34,9 +34,9 @@ public class CartController {
     }
 
     @GetMapping("/addToCart/{id}")
-    public String add(@PathVariable("id") Long id, Principal principal, Model model){
+    public String add(@PathVariable("id") Long id, Principal principal, Model model) {
         Cart cart = cartService.addToCart(id, principal.getName());
-        if(cart == null){
+        if (cart == null) {
             model.addAttribute("cart", "in");
         }
         return "redirect:/product/" + id;
