@@ -19,15 +19,12 @@ public class UserDto {
     @NotEmpty(message = "Podaj nazwisko")
     private String lastName;
 
-    //@NotEmpty(message = "Podaj hasło")
     @Size(min = 5, message = "Hasło nie może mieć mniej niż 5 znaków")
     private String password;
 
-    //@NotEmpty(message = "Ponowinie podaj hasło")
     @Size(min = 5, message = "Hasło nie może mieć mniej niż 5 znaków")
     private String confirmPassword;
 
-    //@NotEmpty(message = "Nazwa użytkownika nie może być pusta")
     @Size(min = 5, message = "Nazwa użytkownika nie może mieć mniej niż 5 znaków")
     private String userName;
 
