@@ -100,11 +100,6 @@
       <artifactId>commons-beanutils</artifactId>
       <version>${commons.beanutils.version}</version>
     </dependency>
-    <dependency>
-      <groupId>org.mapstruct</groupId>
-      <artifactId>mapstruct</artifactId>
-      <version>${org.mapstruct.version}</version>
-    </dependency>
   </dependencies>
 
   <build>
