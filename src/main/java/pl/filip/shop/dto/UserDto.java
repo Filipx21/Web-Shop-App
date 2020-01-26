@@ -13,6 +13,8 @@ import javax.validation.constraints.Size;
 })
 public class UserDto {
 
+    private  Long id;
+
     @NotEmpty(message = "Podaj imię")
     private String firstName;
 
@@ -38,6 +40,14 @@ public class UserDto {
 
     @AssertTrue(message = "Zaakceptuj warunki")
     private Boolean terms;
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
 
     public String getFirstName() {
         return firstName;

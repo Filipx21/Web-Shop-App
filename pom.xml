@@ -20,6 +20,8 @@
     <maven.checkstyle.plugin>3.0.0</maven.checkstyle.plugin>
     <hibernate.validator.version>6.1.1.Final</hibernate.validator.version>
     <thymeleaf.springsecurity5.verion>3.0.4.RELEASE</thymeleaf.springsecurity5.verion>
+    <commons.beanutils.version>1.9.3</commons.beanutils.version>
+    <org.mapstruct.version>1.3.1.Final</org.mapstruct.version>
   </properties>
 
   <parent>
@@ -96,7 +98,12 @@
     <dependency>
       <groupId>commons-beanutils</groupId>
       <artifactId>commons-beanutils</artifactId>
-      <version>1.9.3</version>
+      <version>${commons.beanutils.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.mapstruct</groupId>
+      <artifactId>mapstruct</artifactId>
+      <version>${org.mapstruct.version}</version>
     </dependency>
   </dependencies>
 
@@ -113,6 +120,13 @@
         <configuration>
           <source>11</source>
           <target>11</target>
+          <annotationProcessorPaths>
+            <path>
+              <groupId>org.mapstruct</groupId>
+              <artifactId>mapstruct-processor</artifactId>
+              <version>${org.mapstruct.version}</version>
+            </path>
+          </annotationProcessorPaths>
         </configuration>
       </plugin>
       <plugin>

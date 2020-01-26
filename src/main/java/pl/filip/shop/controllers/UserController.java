@@ -1,5 +1,6 @@
 package pl.filip.shop.controllers;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
@@ -16,6 +17,7 @@ import pl.filip.shop.services.UserService;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
+import java.security.Principal;
 
 @Controller
 public class UserController {
@@ -65,25 +67,13 @@ public class UserController {
         return "redirect:/login";
     }
 
-//    @GetMapping("/newRegistration")
-//    public String register(Model model) {
-//        model.addAttribute("registration_user", new User());
-//        return "registration";
-//    }
-//
-//    @PostMapping("/newRegistration")
-//    public String register(User user) {
-//        userService.register(user);
-//        return "redirect:/login";
-//    }
-//
-//    @GetMapping("/information")
-//    public String userInformation(Model model, Principal principal) {
-//        String username = principal.getName();
-//        User user = userService.findByUsername(username);
-//        model.addAttribute("user", user);
-//        return "information";
-//    }
+    @GetMapping("/information")
+    public String userInformation(Model model, Principal principal) {
+        String email = principal.getName();
+        User user = userService.findByEmail(email);
+        model.addAttribute("user", user);
+        return "information";
+    }
 //
 //    @GetMapping("/edit_user")
 //    public String editProduct(Model model, Principal principal) {
