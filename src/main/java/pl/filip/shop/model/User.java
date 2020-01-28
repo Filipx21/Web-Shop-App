@@ -1,12 +1,8 @@
 package pl.filip.shop.model;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-
-import javax.validation.constraints.Size;
+import javax.persistence.*;
+import java.util.Collection;
+import java.util.Objects;
 
 @Entity
 public class User {
@@ -15,23 +11,58 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(unique = true)
-    private String username;
-
-    @Column(unique = true)
+    private String firstName;
+    private String lastName;
+    private String address;
+    private String postCode;
+    private String city;
     private String email;
-
-    @Size(min = 3)
-    @Column(nullable = false)
     private String password;
 
-    @Column(nullable = false)
-    private String firstName;
+    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @JoinTable(
+            name = "users_roles",
+            joinColumns = @JoinColumn(
+                    name = "user_id", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(
+                    name = "role_id", referencedColumnName = "id"))
+    private Collection<Role> roles;
 
-    @Column(nullable = false)
-    private String lastName;
+    public User() { }
 
-    private boolean enabled;
+    public User(String firstName, String lastName, String address, String postCode, String city) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.address = address;
+        this.postCode = postCode;
+        this.city = city;
+    }
+
+    public User(String firstName, String lastName, String address,
+                String postCode, String city,
+                String email, String password) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.address = address;
+        this.postCode = postCode;
+        this.city = city;
+        this.email = email;
+        this.password = password;
+    }
+
+    public User(String firstName, String lastName,
+                String address, String postCode,
+                String city, String email, String password,
+                Collection<Role> roles) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.address = address;
+        this.postCode = postCode;
+        this.city = city;
+        this.email = email;
+        this.password = password;
+        this.roles = roles;
+    }
 
     public Long getId() {
         return id;
@@ -39,30 +70,6 @@ public class User {
 
     public void setId(Long id) {
         this.id = id;
-    }
-
-    public String getUsername() {
-        return username;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
     }
 
     public String getFirstName() {
@@ -81,12 +88,87 @@ public class User {
         this.lastName = lastName;
     }
 
-    public boolean isEnabled() {
-        return enabled;
+    public String getAddress() {
+        return address;
     }
 
-    public void setEnabled(boolean enabled) {
-        this.enabled = enabled;
+    public void setAddress(String address) {
+        this.address = address;
     }
 
+    public String getPostCode() {
+        return postCode;
+    }
+
+    public void setPostCode(String postCode) {
+        this.postCode = postCode;
+    }
+
+    public String getCity() {
+        return city;
+    }
+
+    public void setCity(String city) {
+        this.city = city;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public Collection<Role> getRoles() {
+        return roles;
+    }
+
+    public void setRoles(Collection<Role> roles) {
+        this.roles = roles;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+        if (obj == null || getClass() != obj.getClass()) return false;
+        User user = (User) obj;
+        return Objects.equals(id, user.id)
+                && Objects.equals(firstName, user.firstName)
+                && Objects.equals(lastName, user.lastName)
+                && Objects.equals(address, user.address)
+                && Objects.equals(postCode, user.postCode)
+                && Objects.equals(city, user.city)
+                && Objects.equals(email, user.email)
+                && Objects.equals(password, user.password)
+                && Objects.equals(roles, user.roles);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, firstName, lastName, address, postCode, city, email, password, roles);
+    }
+
+    @Override
+    public String toString() {
+        return "User{"
+                + "id=" + id
+                + ", firstName='" + firstName + '\''
+                + ", lastName='" + lastName + '\''
+                + ", address='" + address + '\''
+                + ", postCode='" + postCode + '\''
+                + ", city='" + city + '\''
+                + ", email='" + email + '\''
+                + ", password='" + password + '\''
+                + ", roles=" + roles
+                + '}';
+    }
 }

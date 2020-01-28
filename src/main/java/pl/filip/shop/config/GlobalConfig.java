@@ -1,17 +1,23 @@
 package pl.filip.shop.config;
 
+import org.mapstruct.factory.Mappers;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.crypto.factory.PasswordEncoderFactories;
-import org.springframework.security.crypto.password.PasswordEncoder;
+import pl.filip.shop.mapper.UserMapper;
 
 @Configuration
 public class GlobalConfig {
 
     @Bean
-    public PasswordEncoder passwordEncoder() {
-        return PasswordEncoderFactories.createDelegatingPasswordEncoder();
+    public UserMapper userMapper() {
+        return Mappers.getMapper(UserMapper.class);
     }
+
+
+//    @Bean
+//    public PasswordEncoder passwordEncoder() {
+//        return PasswordEncoderFactories.createDelegatingPasswordEncoder();
+//    }
 
 //    @Bean
 //    public Formatter<LocalDate> localDateFormatter() {

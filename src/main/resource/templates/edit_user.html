@@ -17,24 +17,61 @@
         <div style="width: 500px; margin: auto; margin-top: 10px; text-align:center">
             <h1>Zmiana danych</h1>
         </div>
-        <form th:action="@{/editedUser}" method="post" th:object="${user_details}">
-            <div class="form-group">
-                <label for="firstName">Imie</label>
-                <input type="text" th:field="*{firstName}" class="form-control" id="firstName" placeholder="Podaj imię" required="true">
+        <form th:action="@{/edit_user}" th:object="${user}" method="post">
+
+            <p class="error-message" th:if="${#fields.hasGlobalErrors()}"
+               th:each="error : ${#fields.errors('global')}" th:text="${error}">Validation
+                error</p>
+
+            <div class="form-group"
+                 th:classappend="${#fields.hasErrors('firstName')}? 'has-error':''">
+                <label for="firstName" class="control-label">Imię</label> <input
+                    id="firstName" class="form-control" th:field="*{firstName}" />
+                <p class="error-message"
+                   th:each="error: ${#fields.errors('firstName')}"
+                   th:text="${error}">Validation error</p>
             </div>
-            <div class="form-group">
-                <label for="lastName">Nazwisko</label>
-                <input type="text" th:field="*{lastName}" class="form-control" id="lastName" placeholder="Podaj nazwisko" required="true">
+            <div class="form-group"
+                 th:classappend="${#fields.hasErrors('lastName')}? 'has-error':''">
+                <label for="lastName" class="control-label">Nazwisko</label> <input
+                    id="lastName" class="form-control" th:field="*{lastName}" />
+                <p class="error-message"
+                   th:each="error : ${#fields.errors('lastName')}"
+                   th:text="${error}">Validation error</p>
             </div>
-            <div class="form-group">
-                <label for="email">Adres e-mail</label>
-                <input type="email" th:field="*{email}" class="form-control" id="email"  placeholder="Podaj email" required="true">
+
+            <div class="form-group"
+                 th:classappend="${#fields.hasErrors('address')}? 'has-error':''">
+                <label for="address" class="control-label">Ulica i numer budynku</label> <input
+                    id="address" class="form-control" th:field="*{address}" />
+                <p class="error-message"
+                   th:each="error : ${#fields.errors('address')}"
+                   th:text="${error}">Validation error</p>
             </div>
-            <!--<div class="form-group">-->
-                <!--<label for="password">Hasło</label>-->
-                <!--<input type="password" th:field="*{password}" class="form-control" id="password" placeholder="Podaj hasło" required="true">-->
-            <!--</div>-->
-            <input type="submit" value="Zmień dane" class="btn btn-dark"/>
+
+            <div class="row">
+                <div class="col"
+                     th:classappend="${#fields.hasErrors('postCode')}? 'has-error':''">
+                    <label for="postCode" class="control-label">Kod pocztowy</label> <input
+                        id="postCode" class="form-control" th:field="*{postCode}" />
+                    <p class="error-message"
+                       th:each="error : ${#fields.errors('postCode')}"
+                       th:text="${error}">Validation error</p>
+                </div>
+
+                <div class="col-9"
+                     th:classappend="${#fields.hasErrors('city')}? 'has-error':''">
+                    <label for="city" class="control-label">Miejscowość</label> <input
+                        id="city" class="form-control" th:field="*{city}" />
+                    <p class="error-message"
+                       th:each="error : ${#fields.errors('city')}"
+                       th:text="${error}">Validation error</p>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <button type="submit" class="btn btn-dark">Zmień dane</button>
+            </div>
         </form>
     </div>
 </div>

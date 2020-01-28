@@ -9,9 +9,11 @@ import pl.filip.shop.repositories.CartRepository;
 import pl.filip.shop.repositories.ProductRepository;
 import pl.filip.shop.repositories.UserRepository;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class CartService {
@@ -28,99 +30,88 @@ public class CartService {
         this.userRepository = userRepository;
     }
 
-    public Cart addToCart(Long id, String username) {
-        Optional<User> userObj = userRepository.findByUsername(username);
-        Optional<Product> productObj = productRepository.findById(id);
-        User user;
-        Product product;
-
-        if (!userObj.isPresent() || !productObj.isPresent()) {
-            throw new NullPointerException("Object doesn't exist");
-        } else {
-            user = userObj.get();
-            product = productObj.get();
-        }
-        List<Cart> carts = cartRepository.findAllByUserAndInUse(user, true);
-        return cartRepository.save(checkCart(carts, user, product));
-    }
-
-    private Cart checkCart(List<Cart> carts, User user, Product product) {
-        Cart cart;
-        if (carts.size() > 1) {
-            throw new NullPointerException("Occured fatal error");
-        } else if (carts.size() < 1) {
-            List<ProductInOrder> productsInOrder = new ArrayList<>();
-            productsInOrder.add(new ProductInOrder(product));
-            cart = new Cart();
-            cart.setProducts(productsInOrder);
-            cart.setUser(user);
-            cart.setInUse(true);
-            return cart;
-        } else {
-            cart = carts.get(0);
-            List<ProductInOrder> productsInOrder = cart.getProducts();
-            if (productsInOrder.contains(new ProductInOrder(product))) {
-                return null;
-            }
-            productsInOrder.add(new ProductInOrder(product));
-            cart.setProducts(productsInOrder);
-            return cart;
-        }
-    }
-
-    public List<ProductInOrder> productsInCart(String username) {
-        Optional<User> userObj = userRepository.findByUsername(username);
-        List<Cart> objCart;
-        if (!userObj.isPresent()) {
-            throw new NullPointerException("Object doesn't exist");
-        } else {
-            objCart = cartRepository.findAllByUserAndInUse(userObj.get(), true);
-        }
-        if (objCart.size() < 1) {
+    public List<ProductInOrder> productsInCart(String user_email) {
+        try {
+            User user = findUserByEmail(user_email);
+            Cart cart = manageCart(user);
+            return cart.getProducts();
+        } catch (NullPointerException ex) {
+            System.err.println(ex.getMessage());
             return null;
-        } else if (objCart.size() == 1) {
-            return objCart.get(0).getProducts();
-
         }
-        throw new NullPointerException();
     }
 
-    public Cart deleteProductFromCart(Long id, String username) {
-        Optional<User> userObj = userRepository.findByUsername(username);
-        User user;
-
-        if (!userObj.isPresent()) {
-            throw new NullPointerException("Object doesn't exist");
-        } else {
-            user = userObj.get();
+    public Cart addProductToCart(Long product_id, String user_email) {
+        try {
+            User user = findUserByEmail(user_email);
+            Product product = findProductById(product_id);
+            Cart cart = manageCart(user);
+            List<ProductInOrder> products = cart.getProducts();
+            products.add(new ProductInOrder(product));
+            cart.setProducts(products);
+            return cartRepository.save(cart);
+        } catch (NullPointerException | IndexOutOfBoundsException ex) {
+            System.err.println(ex.getMessage());
+            return null;
         }
-        List<Cart> carts = cartRepository.findAllByUserAndInUse(user, true);
-        if (carts.size() > 1) {
-            throw new NullPointerException();
-        }
-        Cart cart = carts.get(0);
-        List<ProductInOrder> productsInOrder = cart.getProducts();
-        for (int i = 0; i < productsInOrder.size(); i++) {
-            if (productsInOrder.get(i).getId().equals(id)) {
-                productsInOrder.remove(i);
-            }
-        }
-        cart.setProducts(productsInOrder);
-        return cartRepository.save(cart);
     }
 
-    public Cart clean(String username) {
-        Optional<User> userObj = userRepository.findByUsername(username);
-        if (userObj.isPresent()) {
-            List<Cart> carts = cartRepository.findAllByUserAndInUse(userObj.get(), true);
-            if (carts.size() > 1) {
-                throw new NullPointerException();
-            }
-            Cart cart = carts.get(0);
+    public Cart deleteProductFromCart(Long id, String user_email) {
+        try {
+            User user = findUserByEmail(user_email);
+            Cart cart = manageCart(user);
+            List<ProductInOrder> products = cart.getProducts()
+                    .stream()
+                    .filter(product -> !product.getId().equals(id))
+                    .collect(Collectors.toList());
+            cart.setProducts(products);
+            return cartRepository.save(cart);
+        } catch (NullPointerException | IndexOutOfBoundsException ex) {
+            System.err.println(ex.getMessage());
+            return null;
+        }
+    }
+
+    public Cart clean(String user_email) {
+        try {
+            User user = findUserByEmail(user_email);
+            Cart cart = manageCart(user);
             cart.setInUse(false);
             return cartRepository.save(cart);
+        } catch (NullPointerException | IndexOutOfBoundsException ex) {
+            System.err.println(ex.getMessage());
+            return null;
         }
-        throw new NullPointerException();
     }
 
+    private Cart manageCart(User user) throws IndexOutOfBoundsException {
+        List<Cart> carts = cartRepository.findAllByUserAndInUse(user, true);
+        if (carts.size() > 1) {
+            throw new IndexOutOfBoundsException(LocalDate.now()
+                    + ": Error occurred while searching the cart. Too many carts");
+        } else if (carts.size() == 1) {
+            return carts.get(0);
+        }
+        return new Cart(new ArrayList<>(), user, true);
+    }
+
+    private User findUserByEmail(String user_email) throws NullPointerException {
+        Optional<User> optionalUser = userRepository.findByEmail(user_email);
+        if (!optionalUser.isPresent()) {
+            throw new NullPointerException(LocalDate.now()
+                    + ": This user [" + user_email + "] doesn't exist.");
+        } else {
+            return optionalUser.get();
+        }
+    }
+
+    private Product findProductById(Long product_id) throws NullPointerException {
+        Optional<Product> optionalProduct = productRepository.findById(product_id);
+        if (!optionalProduct.isPresent()) {
+            throw new NullPointerException(LocalDate.now()
+                    + ": Product with id [" + product_id + "] doesn't exist.");
+        } else {
+            return optionalProduct.get();
+        }
+    }
 }

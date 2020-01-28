@@ -35,7 +35,7 @@ public class CartController {
 
     @GetMapping("/addToCart/{id}")
     public String add(@PathVariable("id") Long id, Principal principal, Model model) {
-        Cart cart = cartService.addToCart(id, principal.getName());
+        Cart cart = cartService.addProductToCart(id, principal.getName());
         if (cart == null) {
             model.addAttribute("cart", "in");
         }
