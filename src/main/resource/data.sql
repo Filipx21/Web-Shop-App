@@ -1,7 +1,7 @@
-INSERT INTO USER (email, first_name, last_name, password, user_name)
-VALUES ('admin@gmail.com', 'Admin', 'Admin', '$2y$12$kpog5A1iMEZGtWZDt1T8buK0dWdvUgzcK0JcnAG9Wbwi7ndRHOs1.', 'admin');
-INSERT INTO USER (email, first_name, last_name, password, user_name)
-VALUES ('user@gmail.com', 'User', 'User', '$2y$12$qkW120i2y653s2TXIE4LFup86Q0M9/vG9woUzlrXMn4kT9kfP6nKm', 'user');
+INSERT INTO USER (email, first_name, last_name, password, address, post_code, city )
+VALUES ('admin@gmail.com', 'Admin', 'Admin', '$2y$12$kpog5A1iMEZGtWZDt1T8buK0dWdvUgzcK0JcnAG9Wbwi7ndRHOs1.', 'Gdzies', '44-211', 'Warszawka');
+INSERT INTO USER (email, first_name, last_name, password, address, post_code, city )
+VALUES ('user@gmail.com', 'User', 'User', '$2y$12$qkW120i2y653s2TXIE4LFup86Q0M9/vG9woUzlrXMn4kT9kfP6nKm', 'Kacza', '44-211', 'Wrocław');
 
 INSERT INTO ROLE (name)
 VALUES ('ROLE_ADMIN');
