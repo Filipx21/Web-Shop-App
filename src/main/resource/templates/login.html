@@ -13,14 +13,16 @@
         <div style="width: 500px; margin: auto; margin-top: 10px; text-align:center">
             <h1>LOGOWANIE</h1>
             <form th:action="@{/login}" method="post">
+
                 <div class="form-group">
                     <label for="id">Nazwa użytkownika</label>
-                    <input type="text" name="username" id="id" class="form-control"/>
+                    <input type="text" name="username" id="id" class="form-control" th:autofocus="true"/>
                 </div>
                 <div class="form-group">
                     <label for="password">Hasło</label>
                     <input type="password" name="password" id="password" class="form-control"/>
                 </div>
+
                 <input type="submit" value="Zaloguj" class="btn btn-dark"/>
             </form>
             <span>Nie masz konta zarejestruj sie tutaj: <a href="/registration">Rejestracja</a></span>

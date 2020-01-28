@@ -17,7 +17,7 @@
 <div class="content">
     <div class="additional-menu">
         <a class="btn additional-menu-button" href="/edit_user">Zmień dane użytkownika</a>
-        <a class="btn additional-menu-button" href="/#">Zmień hasło</a>
+        <a class="btn additional-menu-button" href="/edit_password">Zmień hasło</a>
         <a class="btn additional-menu-button" href="/#">Historia zakupów</a>
         <a class="btn additional-menu-button" href="/enable">Usuń konto</a>
         <div sec:authorize="isAuthenticated()">
@@ -30,7 +30,7 @@
            aria-expanded="false">☰</a>
         <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuLink">
             <a class="dropdown-item" href="/edit_user">Zmień dane użytkownika</a>
-            <a class="dropdown-item" href="/#">Zmień hasło</a>
+            <a class="dropdown-item" href="/edit_password">Zmień hasło</a>
             <a class="dropdown-item" href="/#">Historia zakupów</a>
             <a class="dropdown-item" href="/enable">Usuń konto</a>
             <div sec:authorize="isAuthenticated()">
@@ -42,28 +42,44 @@
     <div class="content-list">
         <h1 class="content-list-information-user">Panel użytkownika</h1>
         <div style="margin: 0% 5%;">
-            <label for="user-name">Nazwa użytkownika:</label>
-            <span id="user-name" sec:authentication="name"></span><br>
 
-            <label for="user-firstName">Imie użytkownika:</label>
-            <span id="user-firstName" th:text="${user.firstName}"></span><br>
-
-            <label for="user-lastName">Nazwisko użytkownika:</label>
-            <span id="user-lastName" th:text="${user.lastName}"></span><br>
-
-            <label for="user-email">Email użytkownika:</label>
-            <span id="user-email" th:text="${user.email}"></span><br>
-
-            <label for="user-enable">Konto aktywne:</label>
-            <span id="user-enable" th:text="${user.enabled}"></span><br>
-
-            <label for="user-role">Rola użytkownika: </label>
-            <span id="user-role" sec:authentication="principal.authorities"></span>
+            <table class="table" style="width: 60%">
+                <tbody>
+                <tr>
+                    <th style="width: 35%">Email użytkownika</th>
+                    <td>
+                        <span sec:authentication="name"></span>
+                    </td>
+                </tr>
+                <tr>
+                    <th style="width: 35%">Imię</th>
+                    <td>
+                        <span th:text="${user.firstName}"></span>
+                    </td>
+                </tr>
+                <tr>
+                    <th style="width: 35%">Nazwisko</th>
+                    <td>
+                        <span th:text="${user.lastName}"></span>
+                    </td>
+                </tr>
+                <tr>
+                    <th style="width: 35%">Ulica i numer domu</th>
+                    <td>
+                        <span th:text="${user.address}"></span>
+                    </td>
+                </tr>
+                <tr>
+                    <th style="width: 35%">Adres pocztowy</th>
+                    <td class="col">
+                        <span th:text="${user.postCode}"></span>
+                        <span class="col-9" th:text="${user.city}"></span>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
         </div>
-
     </div>
-
-
 </div>
 
 <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
