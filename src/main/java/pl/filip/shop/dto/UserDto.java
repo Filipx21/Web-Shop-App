@@ -2,10 +2,7 @@ package pl.filip.shop.dto;
 
 import pl.filip.shop.constraint.FieldMatch;
 
-import javax.validation.constraints.AssertTrue;
-import javax.validation.constraints.Email;
-import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.Size;
+import javax.validation.constraints.*;
 
 @FieldMatch.List({
         @FieldMatch(first = "password", second = "confirmPassword", message = "The password fields must match"),
@@ -21,14 +18,20 @@ public class UserDto {
     @NotEmpty(message = "Podaj nazwisko")
     private String lastName;
 
+    @NotEmpty(message = "Podaj ulice i numer budynku")
+    private String address;
+
+    @Pattern(regexp = "[0-9]{2}-[0-9]{3}", message = "Niepoprawny kod pocztowy. xx-xxx")
+    private String postCode;
+
+    @NotEmpty(message = "Miejscowość nie moze byc pusta")
+    private String city;
+
     @Size(min = 5, message = "Hasło nie może mieć mniej niż 5 znaków")
     private String password;
 
     @Size(min = 5, message = "Hasło nie może mieć mniej niż 5 znaków")
     private String confirmPassword;
-
-    @Size(min = 5, message = "Nazwa użytkownika nie może mieć mniej niż 5 znaków")
-    private String userName;
 
     @Email(message = "E-mail musi zawierać @")
     @NotEmpty(message = "E-mail nie może być pusty")
@@ -65,6 +68,30 @@ public class UserDto {
         this.lastName = lastName;
     }
 
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public String getPostCode() {
+        return postCode;
+    }
+
+    public void setPostCode(String postCode) {
+        this.postCode = postCode;
+    }
+
+    public String getCity() {
+        return city;
+    }
+
+    public void setCity(String city) {
+        this.city = city;
+    }
+
     public String getPassword() {
         return password;
     }
@@ -79,14 +106,6 @@ public class UserDto {
 
     public void setConfirmPassword(String confirmPassword) {
         this.confirmPassword = confirmPassword;
-    }
-
-    public String getUserName() {
-        return userName;
-    }
-
-    public void setUserName(String userName) {
-        this.userName = userName;
     }
 
     public String getEmail() {
