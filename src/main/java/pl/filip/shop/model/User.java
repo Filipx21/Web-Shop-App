@@ -1,8 +1,6 @@
 package pl.filip.shop.model;
 
 import javax.persistence.*;
-
-
 import java.util.Collection;
 import java.util.Objects;
 
@@ -15,7 +13,9 @@ public class User {
 
     private String firstName;
     private String lastName;
-    private String userName;
+    private String address;
+    private String postCode;
+    private String city;
     private String email;
     private String password;
 
@@ -30,20 +30,35 @@ public class User {
 
     public User() { }
 
-    public User(String firstName, String lastName, String userName,
+    public User(String firstName, String lastName, String address, String postCode, String city) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.address = address;
+        this.postCode = postCode;
+        this.city = city;
+    }
+
+    public User(String firstName, String lastName, String address,
+                String postCode, String city,
                 String email, String password) {
         this.firstName = firstName;
         this.lastName = lastName;
-        this.userName = userName;
+        this.address = address;
+        this.postCode = postCode;
+        this.city = city;
         this.email = email;
         this.password = password;
     }
 
-    public User(String firstName, String lastName, String userName,
-                String email, String password, Collection<Role> roles) {
+    public User(String firstName, String lastName,
+                String address, String postCode,
+                String city, String email, String password,
+                Collection<Role> roles) {
         this.firstName = firstName;
         this.lastName = lastName;
-        this.userName = userName;
+        this.address = address;
+        this.postCode = postCode;
+        this.city = city;
         this.email = email;
         this.password = password;
         this.roles = roles;
@@ -73,12 +88,28 @@ public class User {
         this.lastName = lastName;
     }
 
-    public String getUserName() {
-        return userName;
+    public String getAddress() {
+        return address;
     }
 
-    public void setUserName(String userName) {
-        this.userName = userName;
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public String getPostCode() {
+        return postCode;
+    }
+
+    public void setPostCode(String postCode) {
+        this.postCode = postCode;
+    }
+
+    public String getCity() {
+        return city;
+    }
+
+    public void setCity(String city) {
+        this.city = city;
     }
 
     public String getEmail() {
@@ -106,18 +137,16 @@ public class User {
     }
 
     @Override
-    public boolean equals(Object object) {
-        if (this == object) {
-            return true;
-        }
-        if (object == null || getClass() != object.getClass()) {
-            return false;
-        }
-        User user = (User) object;
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+        if (obj == null || getClass() != obj.getClass()) return false;
+        User user = (User) obj;
         return Objects.equals(id, user.id)
                 && Objects.equals(firstName, user.firstName)
                 && Objects.equals(lastName, user.lastName)
-                && Objects.equals(userName, user.userName)
+                && Objects.equals(address, user.address)
+                && Objects.equals(postCode, user.postCode)
+                && Objects.equals(city, user.city)
                 && Objects.equals(email, user.email)
                 && Objects.equals(password, user.password)
                 && Objects.equals(roles, user.roles);
@@ -125,7 +154,7 @@ public class User {
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, firstName, lastName, userName, email, password, roles);
+        return Objects.hash(id, firstName, lastName, address, postCode, city, email, password, roles);
     }
 
     @Override
@@ -134,7 +163,9 @@ public class User {
                 + "id=" + id
                 + ", firstName='" + firstName + '\''
                 + ", lastName='" + lastName + '\''
-                + ", userName='" + userName + '\''
+                + ", address='" + address + '\''
+                + ", postCode='" + postCode + '\''
+                + ", city='" + city + '\''
                 + ", email='" + email + '\''
                 + ", password='" + password + '\''
                 + ", roles=" + roles

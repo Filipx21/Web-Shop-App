@@ -8,6 +8,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import pl.filip.shop.dto.PasswordUserDto;
 import pl.filip.shop.dto.UserDto;
 import pl.filip.shop.model.Role;
 import pl.filip.shop.model.User;
@@ -15,35 +16,50 @@ import pl.filip.shop.repositories.UserRepository;
 
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
 public class UserService implements UserDetailsService {
 
-    @Autowired
     private UserRepository userRepository;
     @Autowired
     private BCryptPasswordEncoder encoder;
+
+    public UserService(UserRepository userRepository) {
+        this.userRepository = userRepository;
+    }
 
     public User findByEmail(String email) {
         Optional<User> object = userRepository.findByEmail(email);
         return object.orElse(null);
     }
 
-    public User findByUsername(String userName) {
-        Optional<User> object = userRepository.findByUserName(userName);
-        return object.orElse(null);
+    public User editUser(User user, String user_email) {
+        Optional<User> userObj = userRepository.findByEmail(user_email);
+        if (userObj.isPresent()) {
+            User toEdit = userObj.get();
+            toEdit.setFirstName(user.getFirstName());
+            toEdit.setLastName(user.getLastName());
+            toEdit.setAddress(user.getAddress());
+            toEdit.setPostCode(user.getPostCode());
+            toEdit.setCity(user.getCity());
+            return userRepository.save(toEdit);
+        }
+        return null;
     }
 
     public User save(UserDto userDto) {
         User user = new User();
         user.setFirstName(userDto.getFirstName());
         user.setLastName(userDto.getLastName());
-        user.setUserName(userDto.getUserName());
+        user.setAddress(userDto.getAddress());
+        user.setPostCode(userDto.getPostCode());
+        user.setCity(userDto.getCity());
         user.setEmail(userDto.getEmail());
         user.setPassword(encoder.encode(userDto.getPassword()));
-        user.setRoles(Arrays.asList(new Role("ROLE_USER")));
+        user.setRoles(Collections.singletonList(new Role("ROLE_USER")));
         return userRepository.save(user);
     }
 
@@ -66,8 +82,24 @@ public class UserService implements UserDetailsService {
                 .collect(Collectors.toList());
     }
 
-//    public void editPassword(User user) {
-//    }
+    public User editPassword(String user_email, PasswordUserDto passwordUserDto) {
+        Optional<User> userObj = userRepository.findByEmail(user_email);
+        if (userObj.isPresent()) {
+            User user = userObj.get();
+            user.setPassword(encoder.encode(passwordUserDto.getPassword()));
+            return userRepository.save(user);
+        }
+        throw new NullPointerException();
+    }
+
+    public boolean deleteAccount(String user_email) {
+        Optional<User> userObj = userRepository.findByEmail(user_email);
+        if (userObj.isPresent()) {
+            userRepository.delete(userObj.get());
+            return true;
+        }
+        return false;
+    }
 
 //    public User findByUsername(String username) {
 //    }
@@ -76,6 +108,7 @@ public class UserService implements UserDetailsService {
 //    }
 
 //    public User disableAcc(String username) {
+
 //    }
 
 }
