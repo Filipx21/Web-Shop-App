@@ -10,7 +10,10 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import pl.filip.shop.dto.EditUserDto;
+import pl.filip.shop.dto.PasswordUserDto;
 import pl.filip.shop.dto.UserDto;
+import pl.filip.shop.mapper.UserMapper;
 import pl.filip.shop.model.User;
 import pl.filip.shop.services.UserService;
 
@@ -23,9 +26,11 @@ import java.security.Principal;
 public class UserController {
 
     private UserService userService;
+    private UserMapper userMapper;
 
-    public UserController(UserService userService) {
+    public UserController(UserService userService, UserMapper userMapper) {
         this.userService = userService;
+        this.userMapper = userMapper;
     }
 
     @GetMapping("/login")
@@ -55,10 +60,6 @@ public class UserController {
         if (existingEmail != null){
             result.rejectValue("email", null, "Juz istnieje taki adres email");
         }
-        User existingUserName = userService.findByEmail(userDto.getEmail());
-        if (existingUserName != null){
-            result.rejectValue("userName", null, "Juz istnieje taka nazwa użytkownika");
-        }
         if (result.hasErrors()){
             return "registration";
         }
@@ -74,33 +75,53 @@ public class UserController {
         model.addAttribute("user", user);
         return "information";
     }
-//
-//    @GetMapping("/edit_user")
-//    public String editProduct(Model model, Principal principal) {
-//        User object = userService.findByUsername(principal.getName());
-//        if (object != null) {
-//            model.addAttribute("user_details", object);
-//            return "edit_user.html";
-//        }
-//        return "not_found.html";
-//    }
-//
-//    @PostMapping("/editedUser")
-//    public String editedUser(User user, Principal principal) {
-//        userService.editUser(user, principal.getName());
-//        return "redirect:/information";
-//    }
-//
-//    @GetMapping("/enable")
-//    public String enableUser(Principal principal,
-//                             HttpServletRequest request,
-//                             HttpServletResponse response) {
-//        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-//        if (auth != null) {
-//            new SecurityContextLogoutHandler().logout(request, response, auth);
-//        }
-//        User disable = userService.disableAcc(principal.getName());
-//
-//        return "redirect:/login";
-//    }
+
+    @GetMapping("/edit_user")
+    public String editProduct(Model model, Principal principal) {
+        User object = userService.findByEmail(principal.getName());
+        if (object != null) {
+            model.addAttribute("user", userMapper.toEditUser(object));
+            return "edit_user.html";
+        }
+        return "not_found.html";
+    }
+
+    @PostMapping("/edit_user")
+    public String editedUser(@Valid @ModelAttribute("user") EditUserDto editUserDto,
+                             BindingResult result, Principal principal) {
+        if (result.hasErrors()) {
+            return "edit_user";
+        }
+        userService.editUser(userMapper.toUser(editUserDto), principal.getName());
+        return "redirect:/information";
+    }
+
+
+    @GetMapping("/edit_password")
+    public String editPassword(Model model) {
+        model.addAttribute("user_password", new PasswordUserDto());
+        return "editPassword.html";
+    }
+
+    @PostMapping("/edit_password")
+    public String editPassword(@Valid @ModelAttribute("user_password") PasswordUserDto password,
+                               BindingResult result, Principal principal) {
+        if (result.hasErrors()) {
+            return "editPassword";
+        }
+        userService.editPassword(principal.getName(), password);
+        return "redirect:/logout";
+    }
+
+    @GetMapping("/enable")
+    public String enableUser(Principal principal,
+                             HttpServletRequest request,
+                             HttpServletResponse response) {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        if (auth != null) {
+            new SecurityContextLogoutHandler().logout(request, response, auth);
+        }
+        userService.deleteAccount(principal.getName());
+        return "redirect:/login";
+    }
 }
