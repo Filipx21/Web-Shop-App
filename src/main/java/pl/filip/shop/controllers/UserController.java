@@ -124,4 +124,12 @@ public class UserController {
         userService.deleteAccount(principal.getName());
         return "redirect:/login";
     }
+
+    @GetMapping("/administror")
+    public String adminPanel(Model model, Principal principal) {
+        String email = principal.getName();
+        User user = userService.findByEmail(email);
+        model.addAttribute("user", user);
+        return "administror";
+    }
 }

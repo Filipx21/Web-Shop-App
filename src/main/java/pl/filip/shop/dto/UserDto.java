@@ -5,8 +5,8 @@ import pl.filip.shop.constraint.FieldMatch;
 import javax.validation.constraints.*;
 
 @FieldMatch.List({
-        @FieldMatch(first = "password", second = "confirmPassword", message = "The password fields must match"),
-        @FieldMatch(first = "email", second = "confirmEmail", message = "The email fields must match")
+        @FieldMatch(first = "password", second = "confirmPassword", message = "Hasła musza byc takie same"),
+        @FieldMatch(first = "email", second = "confirmEmail", message = "Emaile musza byc takie same")
 })
 public class UserDto {
 
