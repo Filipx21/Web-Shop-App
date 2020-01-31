@@ -30,26 +30,40 @@
             <a class="dropdown-item" href="/#">not finished</a>
             <a class="dropdown-item" href="/#">not finished</a>
         </div>
+
+        <div class="content-list-pagination-block-additional">
+            <div th:if="${productPage.totalPages > 0}" class="pagination"
+                 th:each="pageNumber : ${pageNumbers}">
+                <a th:href="@{/products(size=${productPage.size}, page=${pageNumber})}"
+                   th:text=${pageNumber}
+                   th:class="${pageNumber==productPage.number + 1} ? active"></a>
+            </div>
+        </div>
     </div>
 
 
 
     <div class="content-list">
+        <div class="content-list-pagination-block">
+            <div th:if="${productPage.totalPages > 0}" class="pagination"
+                 th:each="pageNumber : ${pageNumbers}">
+                <a th:href="@{/products(size=${productPage.size}, page=${pageNumber})}"
+                   th:text=${pageNumber}
+                   th:class="${pageNumber==productPage.number + 1} ? active"></a>
+            </div>
+        </div>
         <table class="table">
-
             <tbody>
-            <tr th:each="p: ${list_products}">
-                <td class="content-list-picture">
-
-                </td>
-                <td>
-                    <a class="content-list-element" th:href="'/product/' + ${p.id}" th:text="${p.productName}"></a>
-                    <label for="product-cost">Cena produktu</label>
-                    <span id="product-cost" th:text="${p.cost}"></span><br>
-                    <span>Opis produktu</span><br>
-                    <small id="product-descript" th:text="${#strings.abbreviate(p.descript,250)}"></small>
-                </td>
-            </tr>
+                <tr th:each="product : ${productPage.content}">
+                    <td class="content-list-picture"></td>
+                    <td>
+                        <a class="content-list-element" th:href="'/product/' + ${product.id}" th:text="${product.productName}"></a>
+                        <label for="product-cost">Cena produktu</label>
+                        <span id="product-cost" th:text="${product.cost}"></span><br>
+                        <span>Opis produktu</span><br>
+                        <small id="product-descript" th:text="${#strings.abbreviate(product.descript,250)}"></small>
+                    </td>
+                </tr>
             </tbody>
         </table>
     </div>

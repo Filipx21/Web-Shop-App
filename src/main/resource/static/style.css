@@ -155,6 +155,37 @@ html, body {
     margin: 0 0 0 0;
 }
 
+.content-list-pagination-block {
+    background: #313e4f;
+    width: 100%;
+    text-align: center;
+}
+
+.content-list-pagination-block-additional {
+    background: #313e4f;
+    width: 100%;
+    text-align: center;
+}
+
+.pagination {
+    display: inline-block;
+}
+
+.pagination a {
+    float: left;
+    padding: 5px 5px;
+    text-decoration: none;
+    width: 35px;
+    background: #1e5073;
+    color: white;
+    margin: 21% 0 0 0;
+}
+
+.pagination a.active {
+    color: white;
+    background: #2e79ac;
+}
+
 .content-product {
     display: flex;
     flex-wrap: wrap;
@@ -202,7 +233,7 @@ html, body {
 
 .content-product-details-info-buttons-button-admin {
     width: 100%;
-    margin: 0.0% 0% 1% 0%;
+    margin: 0 0 1% 0;
     background: #73261f;
     color: white;
     text-decoration: none;
@@ -269,6 +300,9 @@ html, body {
     .additional-menu-dropdown {
         display: flex;
         flex-direction: row-reverse;
+    }
+    .content-list-pagination-block {
+        display: none;
     }
 }
 
