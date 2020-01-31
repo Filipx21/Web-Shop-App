@@ -158,6 +158,13 @@ html, body {
 .content-list-pagination-block {
     background: #313e4f;
     width: 100%;
+    text-align: center;
+}
+
+.content-list-pagination-block-additional {
+    background: #313e4f;
+    width: 100%;
+    text-align: center;
 }
 
 .pagination {
@@ -165,16 +172,18 @@ html, body {
 }
 
 .pagination a {
-    color: black;
     float: left;
     padding: 5px 5px;
     text-decoration: none;
+    width: 35px;
+    background: #1e5073;
+    color: white;
+    margin: 21% 0 0 0;
 }
 
 .pagination a.active {
-    background-color: gray;
     color: white;
-    border-radius: 2px;
+    background: #2e79ac;
 }
 
 .content-product {
@@ -291,6 +300,9 @@ html, body {
     .additional-menu-dropdown {
         display: flex;
         flex-direction: row-reverse;
+    }
+    .content-list-pagination-block {
+        display: none;
     }
 }
 

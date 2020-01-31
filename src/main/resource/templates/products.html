@@ -30,6 +30,15 @@
             <a class="dropdown-item" href="/#">not finished</a>
             <a class="dropdown-item" href="/#">not finished</a>
         </div>
+
+        <div class="content-list-pagination-block-additional">
+            <div th:if="${productPage.totalPages > 0}" class="pagination"
+                 th:each="pageNumber : ${pageNumbers}">
+                <a th:href="@{/products(size=${productPage.size}, page=${pageNumber})}"
+                   th:text=${pageNumber}
+                   th:class="${pageNumber==productPage.number + 1} ? active"></a>
+            </div>
+        </div>
     </div>
 
 
@@ -43,7 +52,7 @@
                    th:class="${pageNumber==productPage.number + 1} ? active"></a>
             </div>
         </div>
-        <table border="1" class="table">
+        <table class="table">
             <tbody>
                 <tr th:each="product : ${productPage.content}">
                     <td class="content-list-picture"></td>
