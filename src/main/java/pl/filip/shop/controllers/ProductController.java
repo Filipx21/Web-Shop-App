@@ -77,13 +77,13 @@ public class ProductController {
     }
 
 
-    @GetMapping("/add_product")
+    @GetMapping("/admin/add_product")
     public String addProduct(Model model) {
         model.addAttribute("product", new Product());
         return "new_product.html";
     }
 
-    @PostMapping("/add_product")
+    @PostMapping("/admin/add_product")
     public String addProduct(Product product) {
         Product object = productService.saveProduct(product);
         if (object != null) {

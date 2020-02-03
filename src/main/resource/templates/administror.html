@@ -13,17 +13,13 @@
 <body>
 
     <div th:insert="~{fragments :: header}"></div>
+
+
+
     <div class="content">
-        <div class="additional-menu">
-            <div sec:authorize="${hasRole('ROLE_ADMIN')}">
-                <a class="btn additional-menu-button" href="/add_product">Dodaj produkt</a>
-            </div>
-            <a class="btn additional-menu-button" href="/#">Konta w systemie</a>
 
-            <a class="btn additional-menu-button" href="/#">Historia</a>
-        </div>
-
-
+        <div th:replace="~{fragments :: menu_administrator('Dodaj produkt', 'Przeglądaj użytkowników', 'Historia')}"></div>
+        <div th:replace="~{fragments :: additional_menu_administrator('Dodaj produkt', 'Przeglądaj użytkowników', 'Historia', false)}"></div>
 
 
 

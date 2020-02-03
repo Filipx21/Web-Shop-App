@@ -1,6 +1,8 @@
 package pl.filip.shop.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
@@ -10,6 +12,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import pl.filip.shop.dto.EditUserDto;
 import pl.filip.shop.dto.PasswordUserDto;
 import pl.filip.shop.dto.UserDto;
@@ -21,6 +24,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.security.Principal;
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 @Controller
 public class UserController {
@@ -125,11 +132,32 @@ public class UserController {
         return "redirect:/login";
     }
 
-    @GetMapping("/administror")
+    @GetMapping("/admin/administror")
     public String adminPanel(Model model, Principal principal) {
         String email = principal.getName();
         User user = userService.findByEmail(email);
         model.addAttribute("user", user);
         return "administror";
     }
+
+    @GetMapping("/admin/users")
+    public String allUsers(Model model,
+                           @RequestParam("page") Optional<Integer> page,
+                           @RequestParam("size") Optional<Integer> size) {
+        int currentPage = page.orElse(1);
+        int pageSize = size.orElse(8);
+        Page<User> usersPage = userService.findAll(PageRequest.of(currentPage - 1, pageSize));
+
+        model.addAttribute("users", usersPage);
+
+        int totalPages = usersPage.getTotalPages();
+        if (totalPages > 0) {
+            List<Integer> pageNumbers = IntStream.rangeClosed(1, totalPages)
+                    .boxed()
+                    .collect(Collectors.toList());
+            model.addAttribute("pageNumbers", pageNumbers);
+        }
+        return "users";
+    }
+
 }

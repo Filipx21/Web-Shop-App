@@ -13,8 +13,10 @@
 <div th:insert="~{fragments :: header}"></div>
 
 <div class="content">
+    <div th:replace="~{fragments :: menu_administrator('Dodaj produkt', 'Przeglądaj użytkowników', 'Historia')}"></div>
+    <div th:replace="~{fragments :: additional_menu_administrator('Dodaj produkt', 'Przeglądaj użytkowników', 'Historia', false)}"></div>
 
-    <div class="content-list-full">
+    <div class="content-list">
         <form th:action="@{/add_product}" method="post" th:object="${product}" class="content-list-new-product">
             <div class="form-group">
                 <label for="name">Nazwa produktu</label>

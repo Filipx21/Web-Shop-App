@@ -1,6 +1,10 @@
 package pl.filip.shop.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -14,10 +18,7 @@ import pl.filip.shop.model.Role;
 import pl.filip.shop.model.User;
 import pl.filip.shop.repositories.UserRepository;
 
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -104,8 +105,22 @@ public class UserService implements UserDetailsService {
 //    public User findByUsername(String username) {
 //    }
 
-//    public List<User> findAll() {
-//    }
+    public Page<User> findAll(Pageable pageable) {
+        int pageSize = pageable.getPageSize();
+        int currentPage = pageable.getPageNumber();
+        int startItem = currentPage * pageSize;
+        List<User> usersInMemory = userRepository.findAll();
+        List<User> users;
+        if (usersInMemory.size() < startItem) {
+            users = Collections.emptyList();
+        } else {
+            int toIndex = Math.min(startItem + pageSize, usersInMemory.size());
+            users = usersInMemory.subList(startItem, toIndex);
+        }
+        return new PageImpl<>(users,
+                PageRequest.of(currentPage, pageSize),
+                usersInMemory.size());
+    }
 
 //    public User disableAcc(String username) {
 
