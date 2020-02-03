@@ -1,10 +1,16 @@
 package pl.filip.shop.services;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import pl.filip.shop.model.Product;
 import pl.filip.shop.repositories.ProductRepository;
 
+
 import java.time.LocalDate;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -32,25 +38,45 @@ public class ProductService {
         productRepository.deleteById(id);
     }
 
-    public List<Product> findAllProduct() {
-        return productRepository.findAll();
+    public Page<Product> findAllProduct(Pageable pageable) {
+        List<Product> productList = productRepository.findAll();
+        return fillPage(productList, pageable);
+    }
+
+    public Page<Product> findProductsByName(String productName, Pageable pageable) {
+        String upperCase = productName.substring(0, 1).toUpperCase() + productName.substring(1);
+        String lowerCase = productName.substring(0, 1).toLowerCase() + productName.substring(1);
+        List<Product> productList = productRepository.findAllByProductName(upperCase);
+        productList.addAll(productRepository.findAllByProductName(lowerCase));
+
+        if (productList.isEmpty()) {
+            List<Product> products = productRepository.findAll();
+            return fillPage(products, pageable);
+        } else {
+            return fillPage(productList, pageable);
+        }
+    }
+
+    private Page<Product> fillPage(List<Product> productList, Pageable pageable) {
+        int pageSize = pageable.getPageSize();
+        int currentPage = pageable.getPageNumber();
+        int startItem = currentPage * pageSize;
+        List<Product> products;
+
+        if (productList.size() < startItem) {
+            products = Collections.emptyList();
+        } else {
+            int toIndex = Math.min(startItem + pageSize, productList.size());
+            products = productList.subList(startItem, toIndex);
+        }
+        return new PageImpl<>(products,
+                PageRequest.of(currentPage, pageSize),
+                productList.size());
     }
 
     public Product findById(Long id) {
         Optional<Product> object = productRepository.findById(id);
         return object.orElse(null);
-    }
-
-    public List<Product> findProductsByName(String productName) {
-        String upperCase = productName.substring(0, 1).toUpperCase() + productName.substring(1);
-        String lowerCase = productName.substring(0, 1).toLowerCase() + productName.substring(1);
-        List<Product> products = productRepository.findAllByProductName(upperCase);
-        products.addAll(productRepository.findAllByProductName(lowerCase));
-        if (products.isEmpty()) {
-            return null;
-        } else {
-            return products;
-        }
     }
 
 }
