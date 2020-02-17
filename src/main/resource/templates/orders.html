@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+
+<table class="table">
+    <tbody>
+    <tr>
+        <th>Zamówione produkty</th>
+        <th>Wysłano zamówienie</th>
+    </tr>
+    <tr th:each="o : ${orders}">
+        <td>
+            <div th:each="p : ${o.productInOrders}">
+                <p th:text="${p.productName}"></p>
+            </div>
+        </td>
+        <td>
+            <div th:if="${o.finish != false}">Wysłano</div>
+            <div th:if="${o.finish == false}">Nie wysłano</div>
+        </td>
+    </tr>
+    </tbody>
+</table>
+
+</body>
+</html>

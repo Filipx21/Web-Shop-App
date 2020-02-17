@@ -30,7 +30,7 @@
                         </a>
                     </div>
                     <div sec:authorize="isAuthenticated()">
-                        <a class="btn content-product-details-info-buttons-button" href="/#">
+                        <a class="btn content-product-details-info-buttons-button" th:href="'/buy/' + ${product_details.id}">
                             Kup produkt
                         </a>
                     </div>
