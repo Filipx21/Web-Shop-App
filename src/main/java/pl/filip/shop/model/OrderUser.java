@@ -24,7 +24,7 @@ public class OrderUser {
     private List<ProductInOrder> productInOrders;
 
     @OneToOne(fetch = FetchType.LAZY)
-    private User user;
+    private SysUser sysUser;
 
     @NotNull
     private String address;
@@ -49,12 +49,12 @@ public class OrderUser {
         this.productInOrders = productInOrders;
     }
 
-    public User getUser() {
-        return user;
+    public SysUser getSysUser() {
+        return sysUser;
     }
 
-    public void setUser(User user) {
-        this.user = user;
+    public void setSysUser(SysUser sysUser) {
+        this.sysUser = sysUser;
     }
 
     public String getAddress() {

@@ -4,10 +4,11 @@ import org.springframework.stereotype.Service;
 import pl.filip.shop.model.Cart;
 import pl.filip.shop.model.Product;
 import pl.filip.shop.model.ProductInOrder;
-import pl.filip.shop.model.User;
+import pl.filip.shop.model.SysUser;
 import pl.filip.shop.repositories.CartRepository;
 import pl.filip.shop.repositories.ProductRepository;
-import pl.filip.shop.repositories.UserRepository;
+import pl.filip.shop.repositories.SysUserRepository;
+
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -20,11 +21,11 @@ public class CartService {
 
     private CartRepository cartRepository;
     private ProductRepository productRepository;
-    private UserRepository userRepository;
+    private SysUserRepository userRepository;
 
     public CartService(CartRepository cartRepository,
                        ProductRepository productRepository,
-                       UserRepository userRepository) {
+                       SysUserRepository userRepository) {
         this.cartRepository = cartRepository;
         this.productRepository = productRepository;
         this.userRepository = userRepository;
@@ -32,8 +33,8 @@ public class CartService {
 
     public List<ProductInOrder> productsInCart(String user_email) {
         try {
-            User user = findUserByEmail(user_email);
-            Cart cart = manageCart(user);
+            SysUser sysUser = findUserByEmail(user_email);
+            Cart cart = manageCart(sysUser);
             return cart.getProducts();
         } catch (NullPointerException ex) {
             System.err.println(ex.getMessage());
@@ -43,9 +44,9 @@ public class CartService {
 
     public Cart addProductToCart(Long product_id, String user_email) {
         try {
-            User user = findUserByEmail(user_email);
+            SysUser sysUser = findUserByEmail(user_email);
             Product product = findProductById(product_id);
-            Cart cart = manageCart(user);
+            Cart cart = manageCart(sysUser);
             List<ProductInOrder> products = cart.getProducts();
             products.add(new ProductInOrder(product));
             cart.setProducts(products);
@@ -58,8 +59,8 @@ public class CartService {
 
     public Cart deleteProductFromCart(Long id, String user_email) {
         try {
-            User user = findUserByEmail(user_email);
-            Cart cart = manageCart(user);
+            SysUser sysUser = findUserByEmail(user_email);
+            Cart cart = manageCart(sysUser);
             List<ProductInOrder> products = cart.getProducts()
                     .stream()
                     .filter(product -> !product.getId().equals(id))
@@ -74,8 +75,8 @@ public class CartService {
 
     public Cart clean(String user_email) {
         try {
-            User user = findUserByEmail(user_email);
-            Cart cart = manageCart(user);
+            SysUser sysUser = findUserByEmail(user_email);
+            Cart cart = manageCart(sysUser);
             cart.setInUse(false);
             return cartRepository.save(cart);
         } catch (NullPointerException | IndexOutOfBoundsException ex) {
@@ -84,19 +85,19 @@ public class CartService {
         }
     }
 
-    private Cart manageCart(User user) throws IndexOutOfBoundsException {
-        List<Cart> carts = cartRepository.findAllByUserAndInUse(user, true);
+    private Cart manageCart(SysUser sysUser) throws IndexOutOfBoundsException {
+        List<Cart> carts = cartRepository.findAllBySysUserAndInUse(sysUser, true);
         if (carts.size() > 1) {
             throw new IndexOutOfBoundsException(LocalDate.now()
                     + ": Error occurred while searching the cart. Too many carts");
         } else if (carts.size() == 1) {
             return carts.get(0);
         }
-        return new Cart(new ArrayList<>(), user, true);
+        return new Cart(new ArrayList<>(), sysUser, true);
     }
 
-    private User findUserByEmail(String user_email) throws NullPointerException {
-        Optional<User> optionalUser = userRepository.findByEmail(user_email);
+    private SysUser findUserByEmail(String user_email) throws NullPointerException {
+        Optional<SysUser> optionalUser = userRepository.findByEmail(user_email);
         if (!optionalUser.isPresent()) {
             throw new NullPointerException(LocalDate.now()
                     + ": This user [" + user_email + "] doesn't exist.");

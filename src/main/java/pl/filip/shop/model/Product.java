@@ -7,7 +7,6 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToOne;
-import javax.persistence.OneToMany;
 
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotEmpty;
@@ -43,7 +42,7 @@ public class Product {
     @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Producer producer;
 
-    private LocalDate create;
+    private LocalDate createdDate;
 
     public Long getId() {
         return id;
@@ -93,11 +92,11 @@ public class Product {
         this.producer = producer;
     }
 
-    public LocalDate getCreate() {
-        return create;
+    public LocalDate getCreatedDate() {
+        return createdDate;
     }
 
-    public void setCreate(LocalDate create) {
-        this.create = create;
+    public void setCreatedDate(LocalDate createdDate) {
+        this.createdDate = createdDate;
     }
 }

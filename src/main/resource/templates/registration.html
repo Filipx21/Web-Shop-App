@@ -16,7 +16,7 @@
             <div class="registration-content-title">
                 <h1>Rejestracja</h1>
             </div>
-            <form th:action="@{/registration}" th:object="${user}" method="post">
+            <form th:action="@{/registration}" th:object="${sysUser}" method="post">
 
                 <p class="error-message" th:if="${#fields.hasGlobalErrors()}"
                    th:each="error : ${#fields.errors('global')}" th:text="${error}">Validation

@@ -1,6 +1,5 @@
 package pl.filip.shop.controllers;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
@@ -14,7 +13,7 @@ import pl.filip.shop.dto.EditUserDto;
 import pl.filip.shop.dto.PasswordUserDto;
 import pl.filip.shop.dto.UserDto;
 import pl.filip.shop.mapper.UserMapper;
-import pl.filip.shop.model.User;
+import pl.filip.shop.model.SysUser;
 import pl.filip.shop.services.UserService;
 
 import javax.servlet.http.HttpServletRequest;
@@ -56,7 +55,7 @@ public class UserController {
     @PostMapping("/registration")
     public String registerUserAccount(@Valid @ModelAttribute("user") UserDto userDto,
                                       BindingResult result){
-        User existingEmail = userService.findByEmail(userDto.getEmail());
+        SysUser existingEmail = userService.findByEmail(userDto.getEmail());
         if (existingEmail != null){
             result.rejectValue("email", null, "Juz istnieje taki adres email");
         }
@@ -71,14 +70,14 @@ public class UserController {
     @GetMapping("/information")
     public String userInformation(Model model, Principal principal) {
         String email = principal.getName();
-        User user = userService.findByEmail(email);
-        model.addAttribute("user", user);
+        SysUser sysUser = userService.findByEmail(email);
+        model.addAttribute("user", sysUser);
         return "information";
     }
 
     @GetMapping("/edit_user")
     public String editProduct(Model model, Principal principal) {
-        User object = userService.findByEmail(principal.getName());
+        SysUser object = userService.findByEmail(principal.getName());
         if (object != null) {
             model.addAttribute("user", userMapper.toEditUser(object));
             return "edit_user.html";
