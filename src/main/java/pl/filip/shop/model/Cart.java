@@ -14,21 +14,21 @@ public class Cart {
     private List<ProductInOrder> products;
 
     @OneToOne(fetch = FetchType.LAZY)
-    private User user;
+    private SysUser sysUser;
 
     private boolean inUse;
 
     public Cart() {
     }
 
-    public Cart(User user, boolean inUse) {
-        this.user = user;
+    public Cart(SysUser sysUser, boolean inUse) {
+        this.sysUser = sysUser;
         this.inUse = inUse;
     }
 
-    public Cart(List<ProductInOrder> products, User user, boolean inUse) {
+    public Cart(List<ProductInOrder> products, SysUser sysUser, boolean inUse) {
         this.products = products;
-        this.user = user;
+        this.sysUser = sysUser;
         this.inUse = inUse;
     }
 
@@ -48,12 +48,12 @@ public class Cart {
         this.products = products;
     }
 
-    public User getUser() {
-        return user;
+    public SysUser getSysUser() {
+        return sysUser;
     }
 
-    public void setUser(User user) {
-        this.user = user;
+    public void setSysUser(SysUser sysUser) {
+        this.sysUser = sysUser;
     }
 
     public boolean isInUse() {

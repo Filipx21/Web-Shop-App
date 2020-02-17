@@ -5,7 +5,7 @@ import java.util.Collection;
 import java.util.Objects;
 
 @Entity
-public class User {
+public class SysUser {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -28,9 +28,9 @@ public class User {
                     name = "role_id", referencedColumnName = "id"))
     private Collection<Role> roles;
 
-    public User() { }
+    public SysUser() { }
 
-    public User(String firstName, String lastName, String address, String postCode, String city) {
+    public SysUser(String firstName, String lastName, String address, String postCode, String city) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.address = address;
@@ -38,9 +38,9 @@ public class User {
         this.city = city;
     }
 
-    public User(String firstName, String lastName, String address,
-                String postCode, String city,
-                String email, String password) {
+    public SysUser(String firstName, String lastName, String address,
+                   String postCode, String city,
+                   String email, String password) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.address = address;
@@ -50,10 +50,10 @@ public class User {
         this.password = password;
     }
 
-    public User(String firstName, String lastName,
-                String address, String postCode,
-                String city, String email, String password,
-                Collection<Role> roles) {
+    public SysUser(String firstName, String lastName,
+                   String address, String postCode,
+                   String city, String email, String password,
+                   Collection<Role> roles) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.address = address;
@@ -140,16 +140,16 @@ public class User {
     public boolean equals(Object obj) {
         if (this == obj) return true;
         if (obj == null || getClass() != obj.getClass()) return false;
-        User user = (User) obj;
-        return Objects.equals(id, user.id)
-                && Objects.equals(firstName, user.firstName)
-                && Objects.equals(lastName, user.lastName)
-                && Objects.equals(address, user.address)
-                && Objects.equals(postCode, user.postCode)
-                && Objects.equals(city, user.city)
-                && Objects.equals(email, user.email)
-                && Objects.equals(password, user.password)
-                && Objects.equals(roles, user.roles);
+        SysUser sysUser = (SysUser) obj;
+        return Objects.equals(id, sysUser.id)
+                && Objects.equals(firstName, sysUser.firstName)
+                && Objects.equals(lastName, sysUser.lastName)
+                && Objects.equals(address, sysUser.address)
+                && Objects.equals(postCode, sysUser.postCode)
+                && Objects.equals(city, sysUser.city)
+                && Objects.equals(email, sysUser.email)
+                && Objects.equals(password, sysUser.password)
+                && Objects.equals(roles, sysUser.roles);
     }
 
     @Override
@@ -159,7 +159,7 @@ public class User {
 
     @Override
     public String toString() {
-        return "User{"
+        return "SysUser{"
                 + "id=" + id
                 + ", firstName='" + firstName + '\''
                 + ", lastName='" + lastName + '\''

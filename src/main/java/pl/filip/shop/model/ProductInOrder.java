@@ -42,7 +42,7 @@ public class ProductInOrder {
     @NotEmpty
     private String address;
 
-    private LocalDate create;
+    private LocalDate createdDate;
 
     public ProductInOrder() {
     }
@@ -54,7 +54,7 @@ public class ProductInOrder {
         this.cost = product.getCost();
         this.producerName = product.getProducer().getProducerName();
         this.address = product.getProducer().getAddress();
-        this.create = product.getCreate();
+        this.createdDate = product.getCreatedDate();
     }
 
     public Long getId() {
@@ -113,12 +113,12 @@ public class ProductInOrder {
         this.address = address;
     }
 
-    public LocalDate getCreate() {
-        return create;
+    public LocalDate getCreatedDate() {
+        return createdDate;
     }
 
-    public void setCreate(LocalDate create) {
-        this.create = create;
+    public void setCreatedDate(LocalDate createdDate) {
+        this.createdDate = createdDate;
     }
 
     @Override
@@ -131,7 +131,7 @@ public class ProductInOrder {
                 + ", cost=" + cost
                 + ", producerName='" + producerName + '\''
                 + ", address='" + address + '\''
-                + ", create=" + create
+                + ", createdDate=" + createdDate
                 + '}';
     }
 }

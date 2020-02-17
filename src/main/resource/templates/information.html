@@ -40,7 +40,7 @@
     </div>
 
     <div class="content-list">
-        <h1 class="content-list-information-user">Panel użytkownika</h1>
+        <h1 class="content-list-information-sysUser">Panel użytkownika</h1>
         <div style="margin: 0% 5%;">
 
             <table class="table" style="width: 60%">
@@ -54,26 +54,26 @@
                 <tr>
                     <th style="width: 35%">Imię</th>
                     <td>
-                        <span th:text="${user.firstName}"></span>
+                        <span th:text="${sysUser.firstName}"></span>
                     </td>
                 </tr>
                 <tr>
                     <th style="width: 35%">Nazwisko</th>
                     <td>
-                        <span th:text="${user.lastName}"></span>
+                        <span th:text="${sysUser.lastName}"></span>
                     </td>
                 </tr>
                 <tr>
                     <th style="width: 35%">Ulica i numer domu</th>
                     <td>
-                        <span th:text="${user.address}"></span>
+                        <span th:text="${sysUser.address}"></span>
                     </td>
                 </tr>
                 <tr>
                     <th style="width: 35%">Adres pocztowy</th>
                     <td class="col">
-                        <span th:text="${user.postCode}"></span>
-                        <span class="col-9" th:text="${user.city}"></span>
+                        <span th:text="${sysUser.postCode}"></span>
+                        <span class="col-9" th:text="${sysUser.city}"></span>
                     </td>
                 </tr>
                 </tbody>

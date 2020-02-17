@@ -26,8 +26,8 @@ public class ProductService {
     public Product saveProduct(Product product) {
         Product copy = product;
         if (copy != null) {
-            if (copy.getCreate() != null) {
-                copy.setCreate(LocalDate.now());
+            if (copy.getCreatedDate() != null) {
+                copy.setCreatedDate(LocalDate.now());
             }
             return productRepository.save(copy);
         }
