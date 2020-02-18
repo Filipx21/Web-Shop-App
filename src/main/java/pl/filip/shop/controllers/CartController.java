@@ -5,7 +5,9 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import pl.filip.shop.model.Cart;
+import pl.filip.shop.model.OrderUser;
 import pl.filip.shop.model.ProductInOrder;
+import pl.filip.shop.services.BuyService;
 import pl.filip.shop.services.CartService;
 
 import java.security.Principal;
@@ -15,9 +17,11 @@ import java.util.List;
 public class CartController {
 
     private CartService cartService;
+    private BuyService buyService;
 
-    public CartController(CartService cartService) {
+    public CartController(CartService cartService, BuyService buyService) {
         this.cartService = cartService;
+        this.buyService = buyService;
     }
 
     @GetMapping("/getCart")
@@ -51,6 +55,13 @@ public class CartController {
     @GetMapping("/clean_cart")
     public String clean(Principal principal) {
         Cart clean = cartService.clean(principal.getName());
+        return "redirect:/getCart";
+    }
+
+    @GetMapping("buy_cart")
+    public String buy(Principal principal) {
+        String user_email = principal.getName();
+        OrderUser orderUser = buyService.buyAllProductsFromCart(user_email);
         return "redirect:/getCart";
     }
 

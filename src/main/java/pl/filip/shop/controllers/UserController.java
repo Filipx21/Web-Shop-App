@@ -32,12 +32,10 @@ public class UserController {
 
     private UserService userService;
     private UserMapper userMapper;
-    private BuyService buyService;
 
     public UserController(UserService userService, UserMapper userMapper, BuyService buyService) {
         this.userService = userService;
         this.userMapper = userMapper;
-        this.buyService = buyService;
     }
 
     @GetMapping("/login")
@@ -132,11 +130,4 @@ public class UserController {
         return "redirect:/login";
     }
 
-    @GetMapping("/orders")
-    public String story(Principal principal, Model model){
-        List<OrderUser> allOrders = buyService.findAllOrders(principal.getName());
-        Collections.reverse(allOrders);
-        model.addAttribute("orders", allOrders);
-        return "orders.html";
-    }
 }

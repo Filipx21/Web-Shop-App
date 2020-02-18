@@ -8,14 +8,21 @@
 </head>
 <body>
 
-
+<div class="content-list-pagination-block">
+    <div th:if="${ordersPage.totalPages > 0}" class="pagination"
+         th:each="pageNumber : ${ordersPageNumbers}">
+        <a th:href="@{/orders(size=${ordersPage.size}, page=${pageNumber})}"
+           th:text=${pageNumber}
+           th:class="${pageNumber==ordersPage.number + 1} ? active"></a>
+    </div>
+</div>
 <table class="table">
     <tbody>
     <tr>
         <th>Zamówione produkty</th>
         <th>Wysłano zamówienie</th>
     </tr>
-    <tr th:each="o : ${orders}">
+    <tr th:each="o : ${ordersPage.content}">
         <td>
             <div th:each="p : ${o.productInOrders}">
                 <p th:text="${p.productName}"></p>

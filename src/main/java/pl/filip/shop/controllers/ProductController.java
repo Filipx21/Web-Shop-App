@@ -13,7 +13,6 @@ import pl.filip.shop.model.Product;
 import pl.filip.shop.services.BuyService;
 import pl.filip.shop.services.ProductService;
 
-import java.security.Principal;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -23,11 +22,9 @@ import java.util.stream.IntStream;
 public class ProductController {
 
     private ProductService productService;
-    private BuyService buyService;
 
     public ProductController(ProductService productService, BuyService buyService) {
         this.productService = productService;
-        this.buyService = buyService;
     }
 
     @GetMapping("/products")
@@ -110,13 +107,6 @@ public class ProductController {
     @GetMapping("/delete_product/{id}")
     public String deleteProduct(@PathVariable("id") Long id) {
         productService.deleteProductById(id);
-        return "redirect:/products";
-    }
-
-    @GetMapping("/buy/{id}")
-    public String buyProduct(@PathVariable("id") Long id, Principal principal){
-        String email = principal.getName();
-        OrderUser order = buyService.buyProduct(email, id);
         return "redirect:/products";
     }
 
