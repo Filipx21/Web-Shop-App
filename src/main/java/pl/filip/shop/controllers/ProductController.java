@@ -8,7 +8,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import pl.filip.shop.model.OrderUser;
 import pl.filip.shop.model.Product;
+import pl.filip.shop.services.BuyService;
 import pl.filip.shop.services.ProductService;
 
 import java.util.List;
@@ -21,7 +23,7 @@ public class ProductController {
 
     private ProductService productService;
 
-    public ProductController(ProductService productService) {
+    public ProductController(ProductService productService, BuyService buyService) {
         this.productService = productService;
     }
 

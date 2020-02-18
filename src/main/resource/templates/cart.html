@@ -14,9 +14,9 @@
 <div th:insert="~{fragments :: header}"></div>
 <div class="content">
     <div class="additional-menu">
-        <a class="btn additional-menu-button" href="/#">Kup produkty</a>
+        <a class="btn additional-menu-button" href="/buy_cart">Kup produkty</a>
         <a class="btn additional-menu-button" href="/clean_cart">Wyczyść koszyk</a>
-        <a class="btn additional-menu-button" href="/#">Historia</a>
+        <a class="btn additional-menu-button" href="/orders">Historia</a>
     </div>
     <div class="content-list" th:if="${cart_products==null}">
         <h1>Brak towarów w koszyku!</h1>

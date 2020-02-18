@@ -1,16 +1,11 @@
 package pl.filip.shop.model;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.OneToOne;
-import javax.persistence.OneToMany;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
-import javax.validation.constraints.NotNull;
+import javax.persistence.*;
 
+
+import java.time.LocalDate;
 import java.util.List;
 
 @Entity
@@ -25,9 +20,6 @@ public class OrderUser {
 
     @OneToOne(fetch = FetchType.LAZY)
     private SysUser sysUser;
-
-    @NotNull
-    private String address;
 
     private boolean done;
 
@@ -57,14 +49,6 @@ public class OrderUser {
         this.sysUser = sysUser;
     }
 
-    public String getAddress() {
-        return address;
-    }
-
-    public void setAddress(String address) {
-        this.address = address;
-    }
-
     public boolean isDone() {
         return done;
     }
@@ -80,4 +64,5 @@ public class OrderUser {
     public void setFinish(boolean finish) {
         this.finish = finish;
     }
+
 }

@@ -18,7 +18,7 @@
     <div class="additional-menu">
         <a class="btn additional-menu-button" href="/edit_user">Zmień dane użytkownika</a>
         <a class="btn additional-menu-button" href="/edit_password">Zmień hasło</a>
-        <a class="btn additional-menu-button" href="/#">Historia zakupów</a>
+        <a class="btn additional-menu-button" href="/orders">Historia zakupów</a>
         <a class="btn additional-menu-button" href="/enable">Usuń konto</a>
         <div sec:authorize="isAuthenticated()">
             <a class="btn additional-menu-button" href="/logout">Wyloguj</a>
@@ -31,7 +31,7 @@
         <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuLink">
             <a class="dropdown-item" href="/edit_user">Zmień dane użytkownika</a>
             <a class="dropdown-item" href="/edit_password">Zmień hasło</a>
-            <a class="dropdown-item" href="/#">Historia zakupów</a>
+            <a class="dropdown-item" href="/orders">Historia zakupów</a>
             <a class="dropdown-item" href="/enable">Usuń konto</a>
             <div sec:authorize="isAuthenticated()">
                 <a class="dropdown-item" href="/logout">Wyloguj</a>
@@ -54,26 +54,26 @@
                 <tr>
                     <th style="width: 35%">Imię</th>
                     <td>
-                        <span th:text="${sysUser.firstName}"></span>
+                        <span th:text="${user.firstName}"></span>
                     </td>
                 </tr>
                 <tr>
                     <th style="width: 35%">Nazwisko</th>
                     <td>
-                        <span th:text="${sysUser.lastName}"></span>
+                        <span th:text="${user.lastName}"></span>
                     </td>
                 </tr>
                 <tr>
                     <th style="width: 35%">Ulica i numer domu</th>
                     <td>
-                        <span th:text="${sysUser.address}"></span>
+                        <span th:text="${user.address}"></span>
                     </td>
                 </tr>
                 <tr>
                     <th style="width: 35%">Adres pocztowy</th>
                     <td class="col">
-                        <span th:text="${sysUser.postCode}"></span>
-                        <span class="col-9" th:text="${sysUser.city}"></span>
+                        <span th:text="${user.postCode}"></span>
+                        <span class="col-9" th:text="${user.city}"></span>
                     </td>
                 </tr>
                 </tbody>

@@ -13,13 +13,19 @@ import pl.filip.shop.dto.EditUserDto;
 import pl.filip.shop.dto.PasswordUserDto;
 import pl.filip.shop.dto.UserDto;
 import pl.filip.shop.mapper.UserMapper;
+import pl.filip.shop.model.OrderUser;
 import pl.filip.shop.model.SysUser;
+import pl.filip.shop.services.BuyService;
 import pl.filip.shop.services.UserService;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
+import java.io.Console;
 import java.security.Principal;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
 
 @Controller
 public class UserController {
@@ -27,7 +33,7 @@ public class UserController {
     private UserService userService;
     private UserMapper userMapper;
 
-    public UserController(UserService userService, UserMapper userMapper) {
+    public UserController(UserService userService, UserMapper userMapper, BuyService buyService) {
         this.userService = userService;
         this.userMapper = userMapper;
     }
@@ -123,4 +129,5 @@ public class UserController {
         userService.deleteAccount(principal.getName());
         return "redirect:/login";
     }
+
 }
