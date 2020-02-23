@@ -9,4 +9,6 @@ import java.util.List;
 public interface OrderUserRepository extends JpaRepository<OrderUser, Long> {
 
     List<OrderUser> findAllBySysUser(SysUser sysUser);
+
+    List<OrderUser> findAllByFinish(boolean is);
 }

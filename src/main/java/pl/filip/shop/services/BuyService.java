@@ -39,10 +39,23 @@ public class BuyService {
         Optional<OrderUser> objOrder = orderUserRepository.findById(id);
         if(objOrder.isPresent()) {
             OrderUser order = objOrder.get();
-            order.setFinish(true);
-            orderUserRepository.save(order);
+            order.setFinish(!order.isFinish());
+            return orderUserRepository.save(order);
+        } else {
+            throw new NullPointerException("Nie ma takiego zlecenia");
         }
-        throw new NullPointerException("Nie ma takiego zlecenia");
+    }
+
+    public List<OrderUser> findAllNotSent() {
+        List<OrderUser> orders = orderUserRepository.findAllByFinish(false);
+        Collections.reverse(orders);
+        return orders;
+    }
+
+    public List<OrderUser> findAllSent() {
+        List<OrderUser> orders = orderUserRepository.findAllByFinish(true);
+        Collections.reverse(orders);
+        return orders;
     }
 
     public OrderUser buyAllProductsFromCart(String user_email) {
@@ -68,7 +81,7 @@ public class BuyService {
         if(productObj.isPresent()){
             product = new ProductInOrder(productObj.get());
         } else {
-            throw new NullPointerException("Nie ma takieggo produktu");
+            throw new NullPointerException("Nie ma takiego produktu");
         }
         SysUser user = findUser(user_email);
         List<ProductInOrder> products = new ArrayList<>();

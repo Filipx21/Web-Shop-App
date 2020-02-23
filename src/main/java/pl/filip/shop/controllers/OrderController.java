@@ -49,7 +49,6 @@ public class OrderController {
             model.addAttribute("ordersPageNumbers", pageNumbers);
         }
 
-
         return "orders.html";
     }
 
@@ -59,4 +58,7 @@ public class OrderController {
         OrderUser order = buyService.buyProduct(email, id);
         return "redirect:/products";
     }
+
+
+
 }

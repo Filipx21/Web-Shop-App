@@ -18,6 +18,7 @@ public class SysUser {
     private String city;
     private String email;
     private String password;
+    private boolean inUse;
 
     @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinTable(
@@ -30,17 +31,18 @@ public class SysUser {
 
     public SysUser() { }
 
-    public SysUser(String firstName, String lastName, String address, String postCode, String city) {
+    public SysUser(String firstName, String lastName, String address, String postCode, String city, boolean inUse) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.address = address;
         this.postCode = postCode;
         this.city = city;
+        this.inUse = inUse;
     }
 
     public SysUser(String firstName, String lastName, String address,
                    String postCode, String city,
-                   String email, String password) {
+                   String email, String password, boolean inUse) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.address = address;
@@ -48,12 +50,13 @@ public class SysUser {
         this.city = city;
         this.email = email;
         this.password = password;
+        this.inUse = inUse;
     }
 
     public SysUser(String firstName, String lastName,
                    String address, String postCode,
                    String city, String email, String password,
-                   Collection<Role> roles) {
+                   Collection<Role> roles, boolean inUse) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.address = address;
@@ -62,6 +65,7 @@ public class SysUser {
         this.email = email;
         this.password = password;
         this.roles = roles;
+        this.inUse = inUse;
     }
 
     public Long getId() {
@@ -134,6 +138,14 @@ public class SysUser {
 
     public void setRoles(Collection<Role> roles) {
         this.roles = roles;
+    }
+
+    public boolean isInUse() {
+        return inUse;
+    }
+
+    public void setInUse(boolean inUse) {
+        this.inUse = inUse;
     }
 
     @Override

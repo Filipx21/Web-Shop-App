@@ -16,6 +16,7 @@ import pl.filip.shop.repositories.SysUserRepository;
 
 import java.util.Collection;
 import java.util.Collections;
+import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -59,6 +60,7 @@ public class UserService implements UserDetailsService {
         sysUser.setEmail(userDto.getEmail());
         sysUser.setPassword(encoder.encode(userDto.getPassword()));
         sysUser.setRoles(Collections.singletonList(new Role("ROLE_USER")));
+        sysUser.setInUse(true);
         return userRepository.save(sysUser);
     }
 
@@ -69,6 +71,9 @@ public class UserService implements UserDetailsService {
             throw new UsernameNotFoundException("Invalid username or password.");
         }
         SysUser sysUser = object.get();
+        if(!sysUser.isInUse()){
+            throw new UsernameNotFoundException("Konto zablokowane.");
+        }
         return new org.springframework.security.core.userdetails.User(
                 sysUser.getEmail(),
                 sysUser.getPassword(),
@@ -91,20 +96,40 @@ public class UserService implements UserDetailsService {
         throw new NullPointerException();
     }
 
-    public boolean deleteAccount(String user_email) {
+    public boolean deleteAcc(String user_email) {
         Optional<SysUser> userObj = userRepository.findByEmail(user_email);
         if (userObj.isPresent()) {
-            userRepository.delete(userObj.get());
+            SysUser sysUser = userObj.get();
+            sysUser.setInUse(false);
+            userRepository.save(sysUser);
             return true;
         }
         return false;
     }
 
+    public boolean blockAcc(Long id) {
+        Optional<SysUser> userObj = userRepository.findById(id);
+        if (userObj.isPresent()) {
+            SysUser sysUser = userObj.get();
+            sysUser.setInUse(!sysUser.isInUse());
+            userRepository.save(sysUser);
+            return true;
+        }
+        return false;
+    }
+
+    public List<SysUser> findAll() {
+        List<SysUser> users = userRepository.findAll();
+        return users;
+    }
+
+
+
+
 //    public SysUser findByUsername(String username) {
 //    }
 
-//    public List<SysUser> findAll() {
-//    }
+
 
 //    public SysUser disableAcc(String username) {
 

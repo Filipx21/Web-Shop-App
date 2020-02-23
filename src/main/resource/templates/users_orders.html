@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+      lang="pl">
+<head>
+    <title>Sklep</title>
+    <meta charset="UTF-8">
+    <meta name="author" content="Filip">
+    <meta name="description" content="Sklep internetowy">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
+          integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" href="/style.css">
+</head>
+<body>
+
+<div th:insert="~{fragments :: head}"></div>
+<div class="main">
+    <aside></aside>
+    <main>
+        <div class="products-menu">
+            <p>Opcje administratora</p>
+            <div sec:authorize="${hasRole('ROLE_ADMIN')}">
+                <a href="/administrator/add_product">Dodaj produkt</a>
+            </div>
+            <div sec:authorize="${hasRole('ROLE_ADMIN')}">
+                <a href="/administrator/users">Lista użytkowników</a>
+            </div>
+            <div sec:authorize="${hasRole('ROLE_ADMIN')}">
+                <a href="/administrator/orders">Zamówienia</a>
+            </div>
+            <div sec:authorize="${hasRole('ROLE_ADMIN')}">
+                <a href="/administrator/sent_orders">Zrealizowane zamówienia</a>
+            </div>
+            <a href="/products">Powrót do sklepu</a>
+            <div sec:authorize="isAuthenticated()">
+                <a href="/logout">Wyloguj</a>
+            </div>
+        </div>
+        <div class="products-content">
+
+            <table class="table">
+                <tbody>
+                <tr>
+                    <th>Zamówione produkty</th>
+                    <th>Adres</th>
+                    <th>Wyślij/Anuluj</th>
+                </tr>
+                <tr th:each="o : ${orders}">
+                    <td>
+                        <div th:each="p : ${o.productInOrders}">
+                            <p th:text="${p.productName}"></p>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="order-user-detail">
+                            <p>Imię: </p>
+                            <p th:text="${o.sysUser.firstName}"></p>
+                        </div>
+
+                        <div class="order-user-detail">
+                            <p>Nazwisko: </p>
+                            <p th:text="${o.sysUser.lastName}"></p>
+                        </div>
+
+                        <div class="order-user-detail">
+                            <p>Adres: </p>
+                            <p th:text="${o.sysUser.address}"></p>
+                        </div>
+
+                        <div class="order-user-detail">
+                            <p>Kod pocztowy: </p>
+                            <p th:text="${o.sysUser.postCode}"></p>
+                        </div>
+
+                        <div class="order-user-detail">
+                            <p>Miasto: </p>
+                            <p th:text="${o.sysUser.city}"></p>
+                        </div>
+
+                        <div class="order-user-detail">
+                            <p>Email: </p>
+                            <p th:text="${o.sysUser.email}"></p>
+                        </div>
+                    </td>
+                    <td th:if="${o.finish} == false">
+                        <div sec:authorize="${hasRole('ROLE_ADMIN')}">
+                            <a class="button-blue2" th:href="'/administrator/orders/' + ${o.id}">
+                                Wyślij
+                            </a>
+                        </div>
+                    </td>
+                    <td th:if="${o.finish} != false">
+                        <div sec:authorize="${hasRole('ROLE_ADMIN')}">
+                            <a class="button-blue2" th:href="'/administrator/a_orders/' + ${o.id}">
+                                Anuluj
+                            </a>
+                        </div>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+
+
+
+        </div>
+    </main>
+    <aside></aside>
+</div>
+<div th:insert="~{fragments :: footer}"></div>
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+        integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+        crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"
+        integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49"
+        crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"
+        integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy"
+        crossorigin="anonymous"></script>
+</body>
+</html>
