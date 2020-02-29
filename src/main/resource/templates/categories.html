@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:th="http://www.thymeleaf.org"
-      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
       lang="pl">
 <head>
     <title>Sklep</title>
@@ -16,6 +15,7 @@
 <body>
 
 <div th:insert="~{fragments :: head}"></div>
+
 <div class="main">
     <aside></aside>
     <main>
@@ -23,53 +23,32 @@
             <div th:insert="~{fragments :: admin_menu}"></div>
         </div>
         <div class="products-content">
-
             <table class="table">
                 <tbody>
                 <tr>
-                    <th>Imię</th>
-                    <th>Nazwisko</th>
-                    <th>Adres</th>
-                    <th>Kod pocztowy</th>
-                    <th>Miasto</th>
-                    <th>Email</th>
-                    <th>Zablokuj/Odblokuj</th>
+                    <th>Kategoria</th>
+                    <th>Usuń</th>
                 </tr>
-                <tr th:each="u : ${users}">
+                <tr th:each="category : ${categories}">
                     <td>
-                        <p th:text="${u.firstName}"></p>
+                        <p th:text="${category.category}"></p>
                     </td>
                     <td>
-                        <p th:text="${u.lastName}"></p>
-                    </td>
-                    <td>
-                        <p th:text="${u.address}"></p>
-                    </td>
-                    <td>
-                        <p th:text="${u.postCode}"></p>
-                    </td>
-                    <td>
-                        <p th:text="${u.city}"></p>
-                    </td>
-                    <td>
-                        <p th:text="${u.email}"></p>
-                    </td>
-                    <td>
-                        <div th:if="${u.inUse != false}">
-                            <a class="button-blue2" th:href="'/administrator/user/' + ${u.id}">Zablokuj</a>
-                        </div>
-                        <div th:if="${u.inUse == false}">
-                            <a class="button-blue2" th:href="'/administrator/user/' + ${u.id}">Odblokuj</a>
-                        </div>
+                        <a class="button-blue2" th:href="'/administrator/categories/delete/' + ${category.id}">Usuń</a>
                     </td>
                 </tr>
                 </tbody>
             </table>
+
+
         </div>
     </main>
+
     <aside></aside>
 </div>
+
 <div th:insert="~{fragments :: footer}"></div>
+
 <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
         integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
         crossorigin="anonymous"></script>

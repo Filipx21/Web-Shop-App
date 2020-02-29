@@ -13,12 +13,6 @@ public class GlobalConfig {
         return Mappers.getMapper(UserMapper.class);
     }
 
-
-//    @Bean
-//    public PasswordEncoder passwordEncoder() {
-//        return PasswordEncoderFactories.createDelegatingPasswordEncoder();
-//    }
-
 //    @Bean
 //    public Formatter<LocalDate> localDateFormatter() {
 //        return new Formatter<>() {

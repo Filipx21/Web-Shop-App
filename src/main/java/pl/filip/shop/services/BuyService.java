@@ -37,7 +37,7 @@ public class BuyService {
 
     public OrderUser send(Long id) {
         Optional<OrderUser> objOrder = orderUserRepository.findById(id);
-        if(objOrder.isPresent()) {
+        if (objOrder.isPresent()) {
             OrderUser order = objOrder.get();
             order.setFinish(!order.isFinish());
             return orderUserRepository.save(order);
@@ -61,7 +61,7 @@ public class BuyService {
     public OrderUser buyAllProductsFromCart(String user_email) {
         SysUser user = findUser(user_email);
         List<Cart> carts = cartRepository.findAllBySysUserAndInUse(user, true);
-        if(carts.isEmpty()){
+        if (carts.isEmpty()) {
             return null;
         }
         if (carts.size() != 1) {
@@ -75,10 +75,10 @@ public class BuyService {
         return saveOrder(user, products);
     }
 
-    public OrderUser buyProduct(String user_email, Long productId){
+    public OrderUser buyProduct(String user_email, Long productId) {
         Optional<Product> productObj = productRepository.findById(productId);
         ProductInOrder product = null;
-        if(productObj.isPresent()){
+        if (productObj.isPresent()) {
             product = new ProductInOrder(productObj.get());
         } else {
             throw new NullPointerException("Nie ma takiego produktu");
@@ -101,7 +101,7 @@ public class BuyService {
         int currentPage = pageable.getPageNumber();
         int startItem = currentPage * pageSize;
         List<OrderUser> orders;
-        if(ordersList.size() < startItem){
+        if (ordersList.size() < startItem) {
             orders = Collections.emptyList();
         } else {
             int toIndex = Math.min(startItem + pageSize, ordersList.size());
@@ -112,7 +112,7 @@ public class BuyService {
                 ordersList.size());
     }
 
-    private OrderUser saveOrder(SysUser user, List<ProductInOrder> products){
+    private OrderUser saveOrder(SysUser user, List<ProductInOrder> products) {
         OrderUser order = new OrderUser();
         order.setSysUser(user);
         order.setProductInOrders(products);
@@ -125,27 +125,6 @@ public class BuyService {
         Optional<SysUser> userObj = userRepository.findByEmail(user_email);
         return userObj.orElse(null);
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 }

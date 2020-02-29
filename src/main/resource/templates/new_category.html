@@ -21,46 +21,25 @@
     <aside></aside>
     <main>
         <div class="products-menu">
-            <p>Opcje administratora</p>
-            <div sec:authorize="${hasRole('ROLE_ADMIN')}">
-                <a href="/administrator/add_product">Dodaj produkt</a>
-            </div>
-            <div sec:authorize="${hasRole('ROLE_ADMIN')}">
-                <a href="/administrator/category">Dodaj kategorię</a>
-            </div>
-            <div sec:authorize="${hasRole('ROLE_ADMIN')}">
-                <a href="/administrator/users">Lista użytkowników</a>
-            </div>
-            <div sec:authorize="${hasRole('ROLE_ADMIN')}">
-                <a href="/administrator/orders">Zamówienia</a>
-            </div>
-            <div sec:authorize="${hasRole('ROLE_ADMIN')}">
-                <a href="/administrator/sent_orders">Zrealizowane zamówienia</a>
-            </div>
-
-
-            <a href="/products">Powrót do sklepu</a>
-            <div sec:authorize="isAuthenticated()">
-                <a href="/logout">Wyloguj</a>
-            </div>
+            <div th:insert="~{fragments :: admin_menu}"></div>
         </div>
-        <!--<div class="products-content">-->
-            <!--<form th:action="@{/administrator/add_category}" method="post" th:object="${new_category}" class="content-list-new-product">-->
+        <div class="products-content">
+            <form th:action="@{/administrator/category}" method="post" th:object="${category}" class="content-list-new-product">
 
-                <!--<div class="form-group"-->
-                     <!--th:classappend="${#fields.hasErrors('category')}? 'has-error':''">-->
-                    <!--<label for="category" class="control-label">Nazwa produktu</label> <input-->
-                        <!--id="category" class="form-control" th:field="*{category}" />-->
-                    <!--<p class="error-message"-->
-                       <!--th:each="error: ${#fields.errors('category')}"-->
-                       <!--th:text="${error}">Validation error</p>-->
-                <!--</div>-->
+                <div class="form-group"
+                     th:classappend="${#fields.hasErrors('category')}? 'has-error':''">
+                    <label for="category" class="control-label">Nazwa kategorii</label>
+                    <input id="category" type="text" class="form-control" th:field="*{category}">
+                    <p class="error-message"
+                       th:each="error: ${#fields.errors('category')}"
+                       th:text="${error}">Validation error</p>
+                </div>
 
-                <!--<div class="form-group">-->
-                    <!--<input id="addProduct" type="submit" class="button-blue" value="Dodaj">-->
-                <!--</div>-->
-            <!--</form>-->
-        <!--</div>-->
+                <div class="form-group">
+                    <input type="submit" class="button-blue" value="Dodaj">
+                </div>
+            </form>
+        </div>
     </main>
 
     <aside></aside>

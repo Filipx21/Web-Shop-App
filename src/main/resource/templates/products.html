@@ -22,10 +22,10 @@
 
         <div class="products-menu">
             <p>Wybierz kategorię</p>
-            <a href="">kategoria 1</a>
-            <a href="">kategoria 1</a>
-            <a href="">kategoria 1</a>
-            <a href="">kategoria 1</a>
+
+            <div th:each="category : ${all_category}">
+                <a th:href="'/products?category=' + ${category.id}"  th:text="${category.category}"></a>
+            </div>
         </div>
         <div class="products-content">
 

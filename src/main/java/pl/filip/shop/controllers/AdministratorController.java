@@ -4,12 +4,14 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import pl.filip.shop.model.OrderUser;
 import pl.filip.shop.model.Product;
 import pl.filip.shop.model.SysUser;
 import pl.filip.shop.services.BuyService;
+import pl.filip.shop.services.CategoryService;
 import pl.filip.shop.services.ProductService;
 import pl.filip.shop.services.UserService;
 
@@ -23,11 +25,16 @@ public class AdministratorController {
     private UserService userService;
     private BuyService buyService;
     private ProductService productService;
+    private CategoryService categoryService;
 
-    public AdministratorController(UserService userService, BuyService buyService, ProductService productService) {
+    public AdministratorController(UserService userService,
+                                   BuyService buyService,
+                                   ProductService productService,
+                                   CategoryService categoryService) {
         this.userService = userService;
         this.buyService = buyService;
         this.productService = productService;
+        this.categoryService = categoryService;
     }
 
     @GetMapping("/administrator")
@@ -54,19 +61,39 @@ public class AdministratorController {
     @GetMapping("/administrator/add_product")
     public String addProduct(Model model) {
         model.addAttribute("product", new Product());
+        model.addAttribute("all_category", categoryService.findAll());
         return "new_product";
     }
 
     @PostMapping("/administrator/add_product")
-    public String addProduct(@Valid Product product, BindingResult result) {
+    public String addProduct(@Valid @ModelAttribute("product") Product product,
+                             BindingResult result) {
         if (result.hasErrors()){
             return "new_product";
         }
+        boolean isExist = false;
+        if(product.getId() != null){
+            isExist = true;
+        }
         Product object = productService.saveProduct(product);
         if (object != null) {
+            if (isExist) {
+                return "redirect:/product/" + product.getId();
+            }
             return "redirect:/administrator";
         }
         return "external_error.html";
+    }
+
+    @GetMapping("/administrator/edit_product/{id}")
+    public String editProduct(Model model, @PathVariable("id") Long id) {
+        Product object = productService.findById(id);
+        if (object != null) {
+            model.addAttribute("product_details", object);
+            model.addAttribute("all_category", categoryService.findAll());
+            return "edit_product.html";
+        }
+        return "not_found.html";
     }
 
     @GetMapping("/administrator/orders")
@@ -94,8 +121,6 @@ public class AdministratorController {
         OrderUser order = buyService.send(id);
         return "redirect:/administrator/a_orders";
     }
-
-
 
 
 }

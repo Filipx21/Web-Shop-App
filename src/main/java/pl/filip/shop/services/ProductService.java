@@ -5,9 +5,9 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import pl.filip.shop.model.Category;
 import pl.filip.shop.model.Product;
 import pl.filip.shop.repositories.ProductRepository;
-
 
 import java.time.LocalDate;
 import java.util.Collections;
@@ -56,6 +56,17 @@ public class ProductService {
             return fillPage(productList, pageable);
         }
     }
+
+    public Page<Product> findProductsByCategory(Category category, Pageable pageable) {
+        List<Product> productList = productRepository.findAllByCategory(category);
+        if (productList.isEmpty()) {
+            List<Product> products = productRepository.findAll();
+            return fillPage(products, pageable);
+        } else {
+            return fillPage(productList, pageable);
+        }
+    }
+
 
     private Page<Product> fillPage(List<Product> productList, Pageable pageable) {
         int pageSize = pageable.getPageSize();

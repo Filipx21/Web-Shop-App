@@ -17,7 +17,7 @@
 <div class="content">
 
     <div class="content-list-full">
-        <form th:action="@{/add_product}" method="post" th:object="${product_details}" class="content-list-new-product">
+        <form th:action="@{/administrator/add_product}" method="post" th:object="${product_details}" class="content-list-new-product">
             <div class="form-group">
 
                 <input th:field="*{id}" th:type="hidden">
@@ -39,6 +39,18 @@
 
                 <label for="producerAddress">Adres producenta</label>
                 <input id="producerAddress" class="form-control" type="text" th:field="*{producer.address}">
+
+                <div class="form-group"
+                     th:classappend="${#fields.hasErrors('category')}? 'has-error':''">
+                    <label for="category" class="control-label">Kategoria</label>
+                    <select th:field="*{category}" class="form-control" id="category">
+                        <option th:each="cat : ${all_category}" th:text="${cat.category}"  th:value="${cat.id}"></option>
+                    </select>
+                    <p class="error-message"
+                       th:each="error: ${#fields.errors('producer.address')}"
+                       th:text="${error}">Validation error</p>
+                </div>
+
                 <input id="addProduct" type="submit" class="btn btn-primary" value="Dodaj">
             </div>
         </form>

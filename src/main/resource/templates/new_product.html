@@ -21,25 +21,7 @@
     <aside></aside>
     <main>
         <div class="products-menu">
-            <p>Opcje administratora</p>
-            <div sec:authorize="${hasRole('ROLE_ADMIN')}">
-                <a href="/administrator/add_product">Dodaj produkt</a>
-            </div>
-            <div sec:authorize="${hasRole('ROLE_ADMIN')}">
-                <a href="/administrator/users">Lista użytkowników</a>
-            </div>
-            <div sec:authorize="${hasRole('ROLE_ADMIN')}">
-                <a href="/administrator/orders">Zamówienia</a>
-            </div>
-            <div sec:authorize="${hasRole('ROLE_ADMIN')}">
-                <a href="/administrator/sent_orders">Zrealizowane zamówienia</a>
-            </div>
-
-
-            <a href="/products">Powrót do sklepu</a>
-            <div sec:authorize="isAuthenticated()">
-                <a href="/logout">Wyloguj</a>
-            </div>
+            <div th:insert="~{fragments :: admin_menu}"></div>
         </div>
         <div class="products-content">
             <form th:action="@{/administrator/add_product}" method="post" th:object="${product}" class="content-list-new-product">
@@ -98,31 +80,23 @@
                        th:text="${error}">Validation error</p>
                 </div>
 
+                <div class="form-group"
+                     th:classappend="${#fields.hasErrors('category')}? 'has-error':''">
+                    <label for="category" class="control-label">Kategoria</label>
+
+                    <select th:field="*{category}" class="form-control" id="category">
+                        <option th:each="cat : ${all_category}" th:text="${cat.category}"  th:value="${cat.id}"></option>
+                    </select>
+
+                    <p class="error-message"
+                       th:each="error: ${#fields.errors('producer.address')}"
+                       th:text="${error}">Validation error</p>
+                </div>
+
                 <div class="form-group">
                     <input id="addProduct" type="submit" class="button-blue" value="Dodaj">
                 </div>
 
-                <!--<div class="form-group">-->
-                    <!--<label for="name">Nazwa produktu</label>-->
-                    <!--<input id="name" class="form-control" type="text" th:field="*{productName}">-->
-
-                    <!--<label for="descript">Opis</label>-->
-                    <!--<textarea rows="10" cols="50" id="descript" class="form-control" th:field="*{descript}"></textarea>-->
-
-                    <!--<label for="quantity">Ilosc</label>-->
-                    <!--<input id="quantity" class="form-control" type="text" th:field="*{quantity}">-->
-
-                    <!--<label for="cost">Koszt</label>-->
-                    <!--<input id="cost" class="form-control" type="text" th:field="*{cost}">-->
-
-                    <!--<label for="producerName">Nazwa producenta</label>-->
-                    <!--<input id="producerName" class="form-control" type="text" th:field="*{producer.producerName}">-->
-
-                    <!--<label for="producerAddress">Adres producenta</label>-->
-                    <!--<input id="producerAddress" class="form-control" type="text" th:field="*{producer.address}">-->
-
-                    <!--<input id="addProduct" type="submit" class="button-blue" value="Dodaj">-->
-                <!--</div>-->
             </form>
         </div>
     </main>

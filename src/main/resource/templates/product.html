@@ -46,7 +46,7 @@
                             </div>
                             <div sec:authorize="${hasRole('ROLE_ADMIN')}">
                                 <a class="btn content-product-details-info-buttons-button-admin"
-                                   th:href="'/edit_product/' + ${product_details.id}">
+                                   th:href="'/administrator/edit_product/' + ${product_details.id}">
                                     Edytuj produkt
                                 </a>
                             </div>

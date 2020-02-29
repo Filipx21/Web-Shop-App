@@ -67,11 +67,11 @@ public class UserService implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
         Optional<SysUser> object = userRepository.findByEmail(email);
-        if(!object.isPresent()) {
+        if (!object.isPresent()) {
             throw new UsernameNotFoundException("Invalid username or password.");
         }
         SysUser sysUser = object.get();
-        if(!sysUser.isInUse()){
+        if (!sysUser.isInUse()) {
             throw new UsernameNotFoundException("Konto zablokowane.");
         }
         return new org.springframework.security.core.userdetails.User(
@@ -80,7 +80,7 @@ public class UserService implements UserDetailsService {
                 mapRolesToAuthorities(sysUser.getRoles()));
     }
 
-    private Collection<? extends GrantedAuthority> mapRolesToAuthorities(Collection<Role> roles){
+    private Collection<? extends GrantedAuthority> mapRolesToAuthorities(Collection<Role> roles) {
         return roles.stream()
                 .map(role -> new SimpleGrantedAuthority(role.getName()))
                 .collect(Collectors.toList());
@@ -124,11 +124,8 @@ public class UserService implements UserDetailsService {
     }
 
 
-
-
 //    public SysUser findByUsername(String username) {
 //    }
-
 
 
 //    public SysUser disableAcc(String username) {

@@ -4,13 +4,12 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import pl.filip.shop.model.Category;
 import pl.filip.shop.model.Product;
-import pl.filip.shop.services.BuyService;
+import pl.filip.shop.services.CategoryService;
 import pl.filip.shop.services.ProductService;
 
 import java.util.List;
@@ -22,21 +21,29 @@ import java.util.stream.IntStream;
 public class ProductController {
 
     private ProductService productService;
+    private CategoryService categoryService;
 
-    public ProductController(ProductService productService, BuyService buyService) {
+    public ProductController(ProductService productService, CategoryService categoryService) {
         this.productService = productService;
+        this.categoryService = categoryService;
     }
 
     @GetMapping("/products")
     public String products(Model model,
                            @RequestParam(value = "productName", required = false,defaultValue = "") String productName,
+                           @RequestParam(value = "category", required = false, defaultValue = "") String category,
                            @RequestParam("page") Optional<Integer> page,
                            @RequestParam("size") Optional<Integer> size) {
         int currentPage = page.orElse(1);
         int pageSize = size.orElse(8);
         Page<Product> productPage;
 
-        if (!productName.equals("")) {
+        if(!category.isEmpty()){
+            long category_id = Long.parseLong(category);
+            Category cat = categoryService.findById(category_id);
+            productPage = productService
+                    .findProductsByCategory(cat, PageRequest.of(currentPage - 1, pageSize));
+        } else if (!productName.equals("")) {
             productPage = productService
                     .findProductsByName(productName, PageRequest.of(currentPage - 1, pageSize));
         } else {
@@ -49,6 +56,7 @@ public class ProductController {
         }
 
         model.addAttribute("productPage", productPage);
+        model.addAttribute("all_category", categoryService.findAll());
 
         int totalPages = productPage.getTotalPages();
         if (totalPages > 0) {
@@ -76,16 +84,6 @@ public class ProductController {
 
 
         return "buy.html";
-    }
-
-    @GetMapping("/edit_product/{id}")
-    public String editProduct(Model model, @PathVariable("id") Long id) {
-        Product object = productService.findById(id);
-        if (object != null) {
-            model.addAttribute("product_details", object);
-            return "edit_product.html";
-        }
-        return "not_found.html";
     }
 
     @GetMapping("/delete_product/{id}")

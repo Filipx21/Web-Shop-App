@@ -9,7 +9,6 @@ import pl.filip.shop.repositories.CartRepository;
 import pl.filip.shop.repositories.ProductRepository;
 import pl.filip.shop.repositories.SysUserRepository;
 
-
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;

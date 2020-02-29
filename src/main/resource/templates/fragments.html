@@ -72,7 +72,33 @@
     <aside></aside>
 </div>
 
-
+<div th:fragment="admin_menu">
+    <!--<div class="products-menu">-->
+    <p>Opcje administratora</p>
+    <div sec:authorize="${hasRole('ROLE_ADMIN')}">
+        <a href="/administrator/add_product">Dodaj produkt</a>
+    </div>
+    <div sec:authorize="${hasRole('ROLE_ADMIN')}">
+        <a href="/administrator/category">Dodaj kategorię</a>
+    </div>
+    <div sec:authorize="${hasRole('ROLE_ADMIN')}">
+        <a href="/administrator/categories">Edytuj kategorie</a>
+    </div>
+    <div sec:authorize="${hasRole('ROLE_ADMIN')}">
+        <a href="/administrator/users">Lista użytkowników</a>
+    </div>
+    <div sec:authorize="${hasRole('ROLE_ADMIN')}">
+        <a href="/administrator/orders">Zamówienia</a>
+    </div>
+    <div sec:authorize="${hasRole('ROLE_ADMIN')}">
+        <a href="/administrator/sent_orders">Zrealizowane zamówienia</a>
+    </div>
+    <a href="/products">Powrót do sklepu</a>
+    <div sec:authorize="isAuthenticated()">
+        <a href="/logout">Wyloguj</a>
+    </div>
+    <!--</div>-->
+</div>
 
 
 
