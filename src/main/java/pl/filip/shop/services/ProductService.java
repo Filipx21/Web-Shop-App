@@ -31,11 +31,16 @@ public class ProductService {
             }
             return productRepository.save(copy);
         }
-        return null;
+        throw new NullPointerException("Invalid product");
     }
 
-    public void deleteProductById(Long id) {
-        productRepository.deleteById(id);
+    public boolean deleteProductById(Long id) {
+        Optional<Product> objProd = productRepository.findById(id);
+        if(objProd.isPresent()) {
+            productRepository.deleteById(id);
+            return true;
+        }
+        throw new NullPointerException("Invalid id");
     }
 
     public Page<Product> findAllProduct(Pageable pageable) {
@@ -49,7 +54,7 @@ public class ProductService {
         List<Product> productList = productRepository.findAllByProductName(upperCase);
         productList.addAll(productRepository.findAllByProductName(lowerCase));
 
-        if (productList.isEmpty()) {
+        if (productList.size() == 0) {
             List<Product> products = productRepository.findAll();
             return fillPage(products, pageable);
         } else {
