@@ -13,6 +13,7 @@ import javax.validation.constraints.Size;
 import java.math.BigDecimal;
 
 import java.time.LocalDate;
+import java.util.Objects;
 
 @Entity
 public class ProductInOrder {
@@ -119,6 +120,30 @@ public class ProductInOrder {
 
     public void setCreatedDate(LocalDate createdDate) {
         this.createdDate = createdDate;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null || getClass() != obj.getClass()) {
+            return false;
+        }
+        ProductInOrder product = (ProductInOrder) obj;
+        return quantity == product.quantity
+                && Objects.equals(id, product.id)
+                && Objects.equals(productName, product.productName)
+                && Objects.equals(descript, product.descript)
+                && Objects.equals(cost, product.cost)
+                && Objects.equals(producerName, product.producerName)
+                && Objects.equals(address, product.address)
+                && Objects.equals(createdDate, product.createdDate);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, productName, descript, quantity, cost, producerName, address, createdDate);
     }
 
     @Override
