@@ -1,69 +1,35 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xmlns="http://maven.apache.org/POM/4.0.0"
-  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
-  <groupId>pl.filip</groupId>
-  <artifactId>WebShopApp</artifactId>
-  <version>0.0.1</version>
-  <packaging>jar</packaging>
-
-  <properties>
-    <jdk.version>11</jdk.version>
-    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-    <maven.compiler.version>3.8.1</maven.compiler.version>
-    <org.projectlombok.version>1.18.4</org.projectlombok.version>
-    <junit.platform.version>1.3.1</junit.platform.version>
-    <junit.jupiter.version>5.5.2</junit.jupiter.version>
-    <mockito.jupiter.version>2.21.0</mockito.jupiter.version>
-    <maven.checkstyle.plugin>3.0.0</maven.checkstyle.plugin>
-    <hibernate.validator.version>6.1.1.Final</hibernate.validator.version>
-    <thymeleaf.springsecurity5.verion>3.0.4.RELEASE</thymeleaf.springsecurity5.verion>
-    <commons.beanutils.version>1.9.3</commons.beanutils.version>
-    <org.mapstruct.version>1.3.1.Final</org.mapstruct.version>
-  </properties>
-
   <parent>
     <groupId>org.springframework.boot</groupId>
     <artifactId>spring-boot-starter-parent</artifactId>
-    <version>2.2.0.RELEASE</version>
+    <version>2.2.5.RELEASE</version>
+    <relativePath/>
   </parent>
+  <groupId>pl.filip</groupId>
+  <artifactId>webShop</artifactId>
+  <version>0.0.1-SNAPSHOT</version>
+  <name>sklep</name>
+  <description>Sklep internetowy</description>
+
+  <properties>
+    <java.version>11</java.version>
+    <maven.surefire.plugin>2.22.2</maven.surefire.plugin>
+    <hibernate.validator.version>6.1.1.Final</hibernate.validator.version>
+    <jacoco.maven.plugin>0.8.2</jacoco.maven.plugin>
+    <maven.compiler.plugin>3.8.1</maven.compiler.plugin>
+    <org.mapstruct.version>1.3.1.Final</org.mapstruct.version>
+    <commons.beanutils.version>1.9.3</commons.beanutils.version>
+    <thymeleaf.springsecurity5.verion>3.0.4.RELEASE</thymeleaf.springsecurity5.verion>
+
+  </properties>
 
   <dependencies>
     <dependency>
-      <groupId>org.mockito</groupId>
-      <artifactId>mockito-core</artifactId>
-      <version>${mockito.jupiter.version}</version>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.mockito</groupId>
-      <artifactId>mockito-junit-jupiter</artifactId>
-      <version>${mockito.jupiter.version}</version>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.junit.jupiter</groupId>
-      <artifactId>junit-jupiter</artifactId>
-      <version>${junit.jupiter.version}</version>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.postgresql</groupId>
-      <artifactId>postgresql</artifactId>
-    </dependency>
-    <dependency>
       <groupId>org.springframework.boot</groupId>
-      <artifactId>spring-boot-starter-thymeleaf</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.springframework.boot</groupId>
-      <artifactId>spring-boot</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.springframework.boot</groupId>
-      <artifactId>spring-boot-starter-web</artifactId>
+      <artifactId>spring-boot-starter</artifactId>
     </dependency>
     <dependency>
       <groupId>org.springframework.boot</groupId>
@@ -71,23 +37,15 @@
     </dependency>
     <dependency>
       <groupId>org.springframework.boot</groupId>
-      <artifactId>spring-boot-starter-test</artifactId>
-      <scope>test</scope>
-      <exclusions>
-        <exclusion>
-          <groupId>org.springframework.boot</groupId>
-          <artifactId>junit</artifactId>
-        </exclusion>
-      </exclusions>
-    </dependency>
-    <dependency>
-      <groupId>org.hibernate.validator</groupId>
-      <artifactId>hibernate-validator</artifactId>
-      <version>${hibernate.validator.version}</version>
+      <artifactId>spring-boot-starter-web</artifactId>
     </dependency>
     <dependency>
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-starter-security</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-thymeleaf</artifactId>
     </dependency>
     <dependency>
       <groupId>org.thymeleaf.extras</groupId>
@@ -95,9 +53,13 @@
       <version>${thymeleaf.springsecurity5.verion}</version>
     </dependency>
     <dependency>
-      <groupId>commons-beanutils</groupId>
-      <artifactId>commons-beanutils</artifactId>
-      <version>${commons.beanutils.version}</version>
+      <groupId>org.hibernate.validator</groupId>
+      <artifactId>hibernate-validator</artifactId>
+      <version>${hibernate.validator.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.postgresql</groupId>
+      <artifactId>postgresql</artifactId>
     </dependency>
     <dependency>
       <groupId>org.mapstruct</groupId>
@@ -105,8 +67,20 @@
       <version>${org.mapstruct.version}</version>
     </dependency>
     <dependency>
-      <groupId>org.postgresql</groupId>
-      <artifactId>postgresql</artifactId>
+      <groupId>commons-beanutils</groupId>
+      <artifactId>commons-beanutils</artifactId>
+      <version>${commons.beanutils.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-test</artifactId>
+      <scope>test</scope>
+      <exclusions>
+        <exclusion>
+          <groupId>org.junit.vintage</groupId>
+          <artifactId>junit-vintage-engine</artifactId>
+        </exclusion>
+      </exclusions>
     </dependency>
   </dependencies>
 
@@ -119,7 +93,7 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-compiler-plugin</artifactId>
-        <version>${maven.compiler.version}</version>
+        <version>${maven.compiler.plugin}</version>
         <configuration>
           <source>11</source>
           <target>11</target>
@@ -135,33 +109,66 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-surefire-plugin</artifactId>
-        <version>2.22.0</version>
+        <version>${maven.surefire.plugin}</version>
+        <configuration>
+          <excludes>
+            <exclude>**/*IntegrationTest.java</exclude>
+          </excludes>
+        </configuration>
       </plugin>
       <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-checkstyle-plugin</artifactId>
-        <version>${maven.checkstyle.plugin}</version>
+        <groupId>org.jacoco</groupId>
+        <artifactId>jacoco-maven-plugin</artifactId>
+        <version>${jacoco.maven.plugin}</version>
+        <configuration>
+          <excludes>
+            <exclude>pl/praca/sklep/model/*.class</exclude>
+            <exclude>pl/praca/sklep/repositories/*.class</exclude>
+            <exclude>pl/praca/sklep/constraints/*.class</exclude>
+            <exclude>pl/praca/sklep/dto/*.class</exclude>
+            <exclude>pl/praca/sklep/mapper/*.class</exclude>
+          </excludes>
+        </configuration>
         <executions>
           <execution>
-            <id>verify</id>
-            <phase>verify</phase>
-            <configuration>
-              <failsOnError>true</failsOnError>
-            </configuration>
+            <id>jacoco-report</id>
+            <phase>test</phase>
+            <goals>
+              <goal>report</goal>
+            </goals>
+          </execution>
+          <execution>
+            <id>default-prepare-agent</id>
+            <goals>
+              <goal>prepare-agent</goal>
+            </goals>
+          </execution>
+          <execution>
+            <id>check</id>
             <goals>
               <goal>check</goal>
             </goals>
+            <configuration>
+              <rules>
+                <rule>
+                  <element>BUNDLE</element>
+                  <limits>
+                    <limit>
+                      <counter>LINE</counter>
+                      <value>COVEREDRATIO</value>
+                      <minimum>0.80</minimum>
+                    </limit>
+                    <limit>
+                      <counter>BRANCH</counter>
+                      <value>COVEREDRATIO</value>
+                      <minimum>0.50</minimum>
+                    </limit>
+                  </limits>
+                </rule>
+              </rules>
+            </configuration>
           </execution>
         </executions>
-        <configuration>
-          <failsOnError>true</failsOnError>
-          <failOnViolation>true</failOnViolation>
-          <violationSeverity>warning</violationSeverity>
-          <includeTestSourceDirectory>true</includeTestSourceDirectory>
-          <configLocation>checkstyle-config/checkstyle-checker.xml</configLocation>
-          <encoding>UTF-8</encoding>
-          <consoleOutput>true</consoleOutput>
-        </configuration>
       </plugin>
     </plugins>
   </build>
