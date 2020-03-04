@@ -1,6 +1,13 @@
 package pl.filip.shop.model;
 
-import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.CascadeType;
+import javax.persistence.FetchType;
+import javax.persistence.OneToOne;
+import javax.persistence.ManyToOne;
 
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotEmpty;
@@ -10,6 +17,7 @@ import javax.validation.constraints.Size;
 import java.math.BigDecimal;
 
 import java.time.LocalDate;
+import java.util.Objects;
 
 @Entity
 public class Product {
@@ -106,16 +114,40 @@ public class Product {
     }
 
     @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null || getClass() != obj.getClass()) {
+            return false;
+        }
+        Product product = (Product) obj;
+        return quantity == product.quantity
+                && Objects.equals(id, product.id)
+                && Objects.equals(productName, product.productName)
+                && Objects.equals(descript, product.descript)
+                && Objects.equals(cost, product.cost)
+                && Objects.equals(producer, product.producer)
+                && Objects.equals(category, product.category)
+                && Objects.equals(createdDate, product.createdDate);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, productName, descript, quantity, cost, producer, category, createdDate);
+    }
+
+    @Override
     public String toString() {
-        return "Product{" +
-                "id=" + id +
-                ", productName='" + productName + '\'' +
-                ", descript='" + descript + '\'' +
-                ", quantity=" + quantity +
-                ", cost=" + cost +
-                ", producer=" + producer +
-                ", category=" + category +
-                ", createdDate=" + createdDate +
-                '}';
+        return "Product{"
+                + "id=" + id
+                + ", productName='" + productName + '\''
+                + ", descript='" + descript + '\''
+                + ", quantity=" + quantity
+                + ", cost=" + cost
+                + ", producer=" + producer
+                + ", category=" + category
+                + ", createdDate=" + createdDate
+                + '}';
     }
 }
