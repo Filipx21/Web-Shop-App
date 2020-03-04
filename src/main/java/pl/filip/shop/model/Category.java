@@ -62,8 +62,12 @@ public class Category {
 
     @Override
     public boolean equals(Object obj) {
-        if (this == obj) return true;
-        if (obj == null || getClass() != obj.getClass()) return false;
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null || getClass() != obj.getClass()) {
+            return false;
+        }
         Category category1 = (Category) obj;
         return Objects.equals(id, category1.id)
                 && Objects.equals(category, category1.category)

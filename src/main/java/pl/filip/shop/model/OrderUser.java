@@ -1,8 +1,16 @@
 package pl.filip.shop.model;
 
-import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.CascadeType;
+import javax.persistence.OneToMany;
+import javax.persistence.FetchType;
+import javax.persistence.OneToOne;
 
 import java.util.List;
+import java.util.Objects;
 
 @Entity
 public class OrderUser {
@@ -61,4 +69,35 @@ public class OrderUser {
         this.finish = finish;
     }
 
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null || getClass() != obj.getClass()) {
+            return false;
+        }
+        OrderUser orderUser = (OrderUser) obj;
+        return done == orderUser.done
+                && finish == orderUser.finish
+                && Objects.equals(id, orderUser.id)
+                && Objects.equals(productInOrders, orderUser.productInOrders)
+                && Objects.equals(sysUser, orderUser.sysUser);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, productInOrders, sysUser, done, finish);
+    }
+
+    @Override
+    public String toString() {
+        return "OrderUser{"
+                + "id=" + id
+                + ", productInOrders=" + productInOrders
+                + ", sysUser=" + sysUser
+                + ", done=" + done
+                + ", finish=" + finish
+                + '}';
+    }
 }

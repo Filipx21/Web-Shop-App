@@ -7,6 +7,7 @@ import javax.persistence.Id;
 
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
+import java.util.Objects;
 
 @Entity
 public class Producer {
@@ -45,4 +46,31 @@ public class Producer {
         this.address = address;
     }
 
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null || getClass() != obj.getClass()) {
+            return false;
+        }
+        Producer producer = (Producer) obj;
+        return Objects.equals(id, producer.id)
+                && Objects.equals(producerName, producer.producerName)
+                && Objects.equals(address, producer.address);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, producerName, address);
+    }
+
+    @Override
+    public String toString() {
+        return "Producer{"
+                + "id=" + id
+                + ", producerName='" + producerName + '\''
+                + ", address='" + address + '\''
+                + '}';
+    }
 }
