@@ -11,7 +11,7 @@
   <groupId>pl.filip</groupId>
   <artifactId>webShop</artifactId>
   <version>0.0.1-SNAPSHOT</version>
-  <name>sklep</name>
+  <name>WebShopApp</name>
   <description>Sklep internetowy</description>
 
   <properties>
@@ -23,7 +23,6 @@
     <org.mapstruct.version>1.3.1.Final</org.mapstruct.version>
     <commons.beanutils.version>1.9.3</commons.beanutils.version>
     <thymeleaf.springsecurity5.verion>3.0.4.RELEASE</thymeleaf.springsecurity5.verion>
-
   </properties>
 
   <dependencies>
@@ -122,11 +121,11 @@
         <version>${jacoco.maven.plugin}</version>
         <configuration>
           <excludes>
-            <exclude>pl/praca/sklep/model/*.class</exclude>
-            <exclude>pl/praca/sklep/repositories/*.class</exclude>
-            <exclude>pl/praca/sklep/constraints/*.class</exclude>
-            <exclude>pl/praca/sklep/dto/*.class</exclude>
-            <exclude>pl/praca/sklep/mapper/*.class</exclude>
+            <exclude>pl/filip/webShop/model/*.class</exclude>
+            <exclude>pl/filip/webShop/repositories/*.class</exclude>
+            <exclude>pl/filip/webShop/constraints/*.class</exclude>
+            <exclude>pl/filip/webShop/dto/*.class</exclude>
+            <exclude>pl/filip/webShop/mapper/*.class</exclude>
           </excludes>
         </configuration>
         <executions>
