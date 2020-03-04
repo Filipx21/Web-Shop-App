@@ -34,7 +34,8 @@ public class Cart {
         this.inUse = inUse;
     }
 
-    public Cart(List<ProductInOrder> products, SysUser sysUser, boolean inUse) {
+    public Cart(List<ProductInOrder> products,
+                SysUser sysUser, boolean inUse) {
         this.products = products;
         this.sysUser = sysUser;
         this.inUse = inUse;
