@@ -40,7 +40,8 @@ public class SysUser {
 
     public SysUser() { }
 
-    public SysUser(String firstName, String lastName, String address, String postCode, String city, boolean inUse) {
+    public SysUser(String firstName, String lastName, String address,
+                   String postCode, String city, boolean inUse) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.address = address;
