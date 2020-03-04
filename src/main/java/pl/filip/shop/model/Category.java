@@ -61,13 +61,13 @@ public class Category {
     }
 
     @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Category category1 = (Category) o;
-        return Objects.equals(id, category1.id) &&
-                Objects.equals(category, category1.category) &&
-                Objects.equals(product, category1.product);
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+        if (obj == null || getClass() != obj.getClass()) return false;
+        Category category1 = (Category) obj;
+        return Objects.equals(id, category1.id)
+                && Objects.equals(category, category1.category)
+                && Objects.equals(product, category1.product);
     }
 
     @Override
@@ -77,10 +77,10 @@ public class Category {
 
     @Override
     public String toString() {
-        return "Category{" +
-                "id=" + id +
-                ", category='" + category + '\'' +
-                ", product=" + product +
-                '}';
+        return "Category{"
+                + "id=" + id
+                + ", category='" + category + '\''
+                + ", product=" + product
+                + '}';
     }
 }
