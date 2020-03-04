@@ -16,9 +16,18 @@ import pl.filip.shop.repositories.ProductRepository;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.util.*;
 
-import static org.junit.jupiter.api.Assertions.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+import java.util.Random;
+import java.util.Collections;
+
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertNull;
+
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
