@@ -1,45 +1,87 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org"
       xmlns="http://www.w3.org/1999/xhtml"
-      lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>City</title>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
-          integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
-    <link rel="stylesheet" type="text/css" href="/style.css">
-</head>
+      lang="pl">
+    <head>
+        <title>Sklep</title>
+        <meta charset="UTF-8">
+        <meta name="author" content="Filip">
+        <meta name="description" content="Sklep internetowy">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
+              integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+        <link rel="stylesheet" type="text/css" href="/style.css">
+    </head>
 <body>
 
-<div th:insert="~{fragments :: header}"></div>
-<div class="content">
-    <div class="additional-menu">
-        <a class="btn additional-menu-button" href="/buy_cart">Kup produkty</a>
-        <a class="btn additional-menu-button" href="/clean_cart">Wyczyść koszyk</a>
-        <a class="btn additional-menu-button" href="/orders">Historia</a>
-    </div>
-    <div class="content-list" th:if="${cart_products==null}">
-        <h1>Brak towarów w koszyku!</h1>
-    </div>
+<div th:insert="~{fragments :: head}"></div>
+<div class="main">
+    <aside></aside>
+    <main>
+        <div class="products-menu">
+            <a href="/buy_cart">Kup produkty</a>
+            <a href="/clean_cart">Wyczyść koszyk</a>
+            <a href="/orders">Historia</a>
+            <a href="/products">Powrót do sklepu</a>
 
-    <div class="content-list" th:if="${cart_products!=null}">
-        <table class="table">
+        </div>
+        <div class="products-content" th:if="${cart_products==null}">
+            <h1>Brak towarów w koszyku!</h1>
+        </div>
 
-            <tbody>
-            <tr th:each="p: ${cart_products}">
-                <td>
-                    <a class="content-list-element" th:href="'/product/' + ${p.id}" th:text="${p.productName}"></a>
-                    <label for="product-cost" style="display: inline;">Cena produktu</label>
-                    <span id="product-cost" th:text="${p.cost}"></span><br>
-                    <a class="btn content-list-product-button-admin"
-                       th:href="'/delete_product_cart/' + ${p.id}">Usuń</a>
-                </td>
-            </tr>
-            </tbody>
-        </table>
-    </div>
+        <div class="products-content" th:if="${cart_products!=null}">
+            <table class="table">
 
+                <tbody>
+                <tr th:each="p: ${cart_products}">
+                    <td>
+                        <a class="content-list-element" th:href="'/product/' + ${p.id}" th:text="${p.productName}"></a>
+                        <label for="product-cost" style="display: inline;">Cena produktu</label>
+                        <span id="product-cost" th:text="${p.cost}"></span><br>
+                        <a class="btn content-list-product-button-admin"
+                           th:href="'/delete_product_cart/' + ${p.id}">Usuń</a>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </main>
+    <aside></aside>
 </div>
+
+
+
+
+
+<!--<div class="content">-->
+    <!--<div class="additional-menu">-->
+        <!--<a class="btn additional-menu-button" href="/buy_cart">Kup produkty</a>-->
+        <!--<a class="btn additional-menu-button" href="/clean_cart">Wyczyść koszyk</a>-->
+        <!--<a class="btn additional-menu-button" href="/orders">Historia</a>-->
+    <!--</div>-->
+    <!--<div class="content-list" th:if="${cart_products==null}">-->
+        <!--<h1>Brak towarów w koszyku!</h1>-->
+    <!--</div>-->
+
+    <!--<div class="content-list" th:if="${cart_products!=null}">-->
+        <!--<table class="table">-->
+
+            <!--<tbody>-->
+            <!--<tr th:each="p: ${cart_products}">-->
+                <!--<td>-->
+                    <!--<a class="content-list-element" th:href="'/product/' + ${p.id}" th:text="${p.productName}"></a>-->
+                    <!--<label for="product-cost" style="display: inline;">Cena produktu</label>-->
+                    <!--<span id="product-cost" th:text="${p.cost}"></span><br>-->
+                    <!--<a class="btn content-list-product-button-admin"-->
+                       <!--th:href="'/delete_product_cart/' + ${p.id}">Usuń</a>-->
+                <!--</td>-->
+            <!--</tr>-->
+            <!--</tbody>-->
+        <!--</table>-->
+    <!--</div>-->
+<!--</div>-->
+
+<div th:insert="~{fragments :: footer}"></div>
 
 
 <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"

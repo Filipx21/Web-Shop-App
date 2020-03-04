@@ -2,15 +2,111 @@
 <html xmlns:th="http://www.thymeleaf.org"
       xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
       xmlns="http://www.w3.org/1999/xhtml"
-      lang="en">
-<head>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
-          integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
-    <link rel="stylesheet" type="text/css" href="/style.css">
-</head>
+      lang="pl">
+    <head>
+        <title>Sklep</title>
+        <meta charset="UTF-8">
+        <meta name="author" content="Filip">
+        <meta name="description" content="Sklep internetowy">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
+              integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+        <link rel="stylesheet" type="text/css" href="/style.css">
+    </head>
 <body>
 
-<!--<div th:fragment="header" class="header">-->
+<div class="head" th:fragment="head">
+    <header>
+        <div class="logo">
+            <a href="/">
+                <img src="/img/logo.png" alt="logo">
+            </a>
+        </div>
+        <section class="search">
+            <form th:action="@{/products}" method="get">
+                <button type="submit">
+                    <img class="search-button" src="/img/search.png" alt="search">
+                </button>
+                <input type="text" th:name="productName" placeholder="Wyszukaj produkt">
+            </form>
+        </section>
+        <section class="order">
+            <a class="menu-button" href="/getCart">
+                <img src="/img/cart.png">
+                <p>Koszyk</p>
+            </a>
+        </section>
+        <section class="menu">
+            <a data-toggle="dropdown" class="menu-buttons">
+                <img src="/img/profile.png">
+                <p>Konto</p>
+            </a>
+            <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuLink">
+                <a class="dropdown-item" href="/products">Lista produktów</a>
+                <div class="dropdown-divider"></div>
+                <div sec:authorize="${hasRole('ROLE_ADMIN')}">
+                    <a class="dropdown-item" href="/administrator">Panel administratora</a>
+                </div>
+                <div sec:authorize="isAuthenticated()">
+                    <a class="dropdown-item" href="/information">Panel użytkownika</a>
+                </div>
+                <div sec:authorize="!isAuthenticated()">
+                    <a class="dropdown-item" href="/login">
+                        <img src="/img/login.png">Zaloguj
+                    </a>
+                </div>
+                <div sec:authorize="isAuthenticated()">
+                    <a class="dropdown-item" href="/logout">Wyloguj</a>
+                </div>
+            </div>
+        </section>
+    </header>
+    <section></section>
+</div>
+
+
+
+<div class="main">
+    <aside></aside>
+    <main></main>
+    <aside></aside>
+</div>
+
+<div th:fragment="admin_menu">
+    <!--<div class="products-menu">-->
+    <p>Opcje administratora</p>
+    <div sec:authorize="${hasRole('ROLE_ADMIN')}">
+        <a href="/administrator/add_product">Dodaj produkt</a>
+    </div>
+    <div sec:authorize="${hasRole('ROLE_ADMIN')}">
+        <a href="/administrator/category">Dodaj kategorię</a>
+    </div>
+    <div sec:authorize="${hasRole('ROLE_ADMIN')}">
+        <a href="/administrator/categories">Edytuj kategorie</a>
+    </div>
+    <div sec:authorize="${hasRole('ROLE_ADMIN')}">
+        <a href="/administrator/users">Lista użytkowników</a>
+    </div>
+    <div sec:authorize="${hasRole('ROLE_ADMIN')}">
+        <a href="/administrator/orders">Zamówienia</a>
+    </div>
+    <div sec:authorize="${hasRole('ROLE_ADMIN')}">
+        <a href="/administrator/sent_orders">Zrealizowane zamówienia</a>
+    </div>
+    <a href="/products">Powrót do sklepu</a>
+    <div sec:authorize="isAuthenticated()">
+        <a href="/logout">Wyloguj</a>
+    </div>
+    <!--</div>-->
+</div>
+
+
+
+<div class="footer" th:fragment="footer">
+
+</div>
+
+
 <div th:fragment="header" class="header">
     <div class="header-content">
         <div class="header-content-logo">
@@ -29,75 +125,32 @@
                 <img src="/img/cart.png">
             </a>
             <div class="dropdown header-content-menu-dropdown">
-                    <a class="btn btn-warning header-content-menu-dropdown-hamburger" type="button" data-toggle="dropdown"
-                       aria-haspopup="true"
-                       aria-expanded="false">☰</a>
-                    <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuLink">
-                        <a class="dropdown-item" href="/products">Lista produktów</a>
-                        <div sec:authorize="${hasRole('ROLE_ADMIN')}">
-                            <a class="dropdown-item" href="/add_product">Dodaj produkt</a>
-                        </div>
-                        <div class="dropdown-divider"></div>
-                        <div sec:authorize="${hasRole('ROLE_ADMIN')}">
-                            <a class="dropdown-item" href="/#">Panel administratora</a>
-                        </div>
-                        <div sec:authorize="isAuthenticated()">
-                            <a class="dropdown-item" href="/information">Panel użytkownika</a>
-                        </div>
-                        <div sec:authorize="!isAuthenticated()">
-                            <a class="dropdown-item" href="/login">
-                                <img src="/img/login.png">Zaloguj
-                            </a>
-                        </div>
-                        <div sec:authorize="isAuthenticated()">
-                            <a class="dropdown-item" href="/logout">Wyloguj</a>
-                        </div>
+                <a class="btn btn-warning header-content-menu-dropdown-hamburger" type="button" data-toggle="dropdown"
+                   aria-haspopup="true"
+                   aria-expanded="false">☰</a>
+                <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuLink">
+                    <a class="dropdown-item" href="/products">Lista produktów</a>
+                    <div sec:authorize="${hasRole('ROLE_ADMIN')}">
+                        <a class="dropdown-item" href="/add_product">Dodaj produkt</a>
+                    </div>
+                    <div class="dropdown-divider"></div>
+                    <div sec:authorize="${hasRole('ROLE_ADMIN')}">
+                        <a class="dropdown-item" href="/#">Panel administratora</a>
+                    </div>
+                    <div sec:authorize="isAuthenticated()">
+                        <a class="dropdown-item" href="/information">Panel użytkownika</a>
+                    </div>
+                    <div sec:authorize="!isAuthenticated()">
+                        <a class="dropdown-item" href="/login">
+                            <img src="/img/login.png">Zaloguj
+                        </a>
+                    </div>
+                    <div sec:authorize="isAuthenticated()">
+                        <a class="dropdown-item" href="/logout">Wyloguj</a>
                     </div>
                 </div>
-
-
-            <!--</div>-->
-
-
-            <!--<div class="header-menu-box">&ndash;&gt;-->
-                <!--<a href="/getCart" class="header-cart">-->
-                    <!--<img src="/img/cart.png">-->
-                <!--</a>-->
-                <!--<div class="dropdown header-menu">-->
-                    <!--<a class="btn btn-warning header-menu-hamburger" type="button" data-toggle="dropdown"-->
-                       <!--aria-haspopup="true"-->
-                       <!--aria-expanded="false">☰</a>-->
-                    <!---->
-                    <!---->
-                    <!--<div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuLink">-->
-                        <!--<a class="dropdown-item" href="/products">Lista produktów</a>-->
-                        <!--<div sec:authorize="${hasRole('ROLE_ADMIN')}">-->
-                            <!--<a class="dropdown-item" href="/add_product">Dodaj produkt</a>-->
-                        <!--</div>-->
-                        <!--<div class="dropdown-divider"></div>-->
-                        <!--<div sec:authorize="${hasRole('ROLE_ADMIN')}">-->
-                            <!--<a class="dropdown-item" href="/#">Panel administratora</a>-->
-                        <!--</div>-->
-                        <!--<div sec:authorize="isAuthenticated()">-->
-                            <!--<a class="dropdown-item" href="/information">Panel użytkownika</a>-->
-                        <!--</div>-->
-                        <!--<div sec:authorize="!isAuthenticated()">-->
-                            <!--<a class="dropdown-item" href="/login">-->
-                                <!--<img src="/img/login.png">-->
-                                <!--Zaloguj-->
-                            <!--</a>-->
-                        <!--</div>-->
-                        <!--<div sec:authorize="isAuthenticated()">-->
-                            <!--<a class="dropdown-item" href="/logout">Wyloguj</a>-->
-                        <!--</div>-->
-                    <!--</div>-->
-                <!--</div>-->
-                <!---->
-                <!---->
-            <!--</div>-->
+            </div>
         </div>
-
-
     </div>
 
 
