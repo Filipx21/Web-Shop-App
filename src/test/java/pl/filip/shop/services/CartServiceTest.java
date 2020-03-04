@@ -5,17 +5,31 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import pl.filip.shop.model.*;
+
+import pl.filip.shop.model.Cart;
+import pl.filip.shop.model.OrderUser;
+import pl.filip.shop.model.ProductInOrder;
+import pl.filip.shop.model.SysUser;
+import pl.filip.shop.model.Category;
+import pl.filip.shop.model.Producer;
+import pl.filip.shop.model.Role;
+import pl.filip.shop.model.Product;
+
 import pl.filip.shop.repositories.CartRepository;
 import pl.filip.shop.repositories.ProductRepository;
 import pl.filip.shop.repositories.SysUserRepository;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+import java.util.Random;
 import java.util.stream.Collectors;
+import java.util.Collection;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
