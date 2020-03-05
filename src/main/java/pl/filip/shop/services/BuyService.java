@@ -16,6 +16,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class BuyService {
@@ -47,15 +48,11 @@ public class BuyService {
     }
 
     public List<OrderUser> findAllNotSent() {
-        List<OrderUser> orders = orderUserRepository.findAllByFinish(false);
-        Collections.reverse(orders);
-        return orders;
+        return orderUserRepository.findAllByFinish(false);
     }
 
     public List<OrderUser> findAllSent() {
-        List<OrderUser> orders = orderUserRepository.findAllByFinish(true);
-        Collections.reverse(orders);
-        return orders;
+        return orderUserRepository.findAllByFinish(true);
     }
 
     public OrderUser buyAllProductsFromCart(String user_email) {
@@ -77,13 +74,16 @@ public class BuyService {
 
     public OrderUser buyProduct(String user_email, Long productId) {
         Optional<Product> productObj = productRepository.findById(productId);
-        ProductInOrder product = null;
+        ProductInOrder product;
         if (productObj.isPresent()) {
             product = new ProductInOrder(productObj.get());
         } else {
             throw new NullPointerException("Nie ma takiego produktu");
         }
         SysUser user = findUser(user_email);
+        if(user == null) {
+            throw new NullPointerException("Nie ma takiego uzytkownika");
+        }
         List<ProductInOrder> products = new ArrayList<>();
         products.add(product);
         return saveOrder(user, products);
@@ -92,7 +92,6 @@ public class BuyService {
     public Page<OrderUser> findAllOrders(String user_email, Pageable pageable) {
         SysUser user = findUser(user_email);
         List<OrderUser> orders = orderUserRepository.findAllBySysUser(user);
-        Collections.reverse(orders);
         return fillPage(orders, pageable);
     }
 

@@ -14,7 +14,6 @@ import pl.filip.shop.model.Category;
 import pl.filip.shop.model.Producer;
 import pl.filip.shop.model.Role;
 import pl.filip.shop.model.Product;
-
 import pl.filip.shop.repositories.CartRepository;
 import pl.filip.shop.repositories.ProductRepository;
 import pl.filip.shop.repositories.SysUserRepository;
@@ -29,7 +28,8 @@ import java.util.stream.Collectors;
 import java.util.Collection;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -48,7 +48,7 @@ class CartServiceTest {
     CartService cartService;
 
     @Test
-    void productsInCart() {
+    void shouldFindProductsInCart() {
         SysUser user = prepareUser();
         Cart cart = prepareCart();
 
@@ -61,7 +61,26 @@ class CartServiceTest {
     }
 
     @Test
-    void addProductToCart() {
+    void shouldThrowNullExceptionFindProductsInCart() {
+        SysUser user = prepareUser();
+
+        when(userRepository.findByEmail(user.getEmail())).thenReturn(Optional.of(user));
+        when(cartRepository.findAllBySysUserAndInUse(user, true)).thenThrow(IndexOutOfBoundsException.class);
+
+        assertThrows( IndexOutOfBoundsException.class, () ->cartService.productsInCart(user.getEmail()));
+    }
+
+    @Test
+    void shouldThrowIndexOutOfBoundsExceptionFindProductsInCart() {
+        SysUser user = prepareUser();
+
+        when(userRepository.findByEmail(user.getEmail())).thenReturn(Optional.empty());
+
+        assertNull(cartService.productsInCart(user.getEmail()));
+    }
+
+    @Test
+    void shouldAddProductToCart() {
         SysUser user = prepareUser();
         Product product = prepareProduct();
         Cart cart = prepareCart();
@@ -80,7 +99,7 @@ class CartServiceTest {
     }
 
     @Test
-    void deleteProductFromCart() {
+    void shouldDeleteProductFromCart() {
         SysUser user = prepareUser();
         Cart cart = prepareCart();
         cart.setInUse(true);
@@ -101,7 +120,7 @@ class CartServiceTest {
     }
 
     @Test
-    void clean() {
+    void shouldClean() {
         SysUser user = prepareUser();
         Cart cart = prepareCart();
 
@@ -113,6 +132,20 @@ class CartServiceTest {
         cart.setInUse(false);
 
         assertEquals(cart, result);
+    }
+
+    @Test
+    void shouldNotClean() {
+        SysUser user = prepareUser();
+        Cart cart = prepareCart();
+
+        when(userRepository.findByEmail(user.getEmail())).thenReturn(Optional.of(user));
+        when(cartRepository.findAllBySysUserAndInUse(user, true)).thenReturn(List.of(cart));
+        when(cartRepository.save(cart)).thenThrow(NullPointerException.class);
+
+        Cart result = cartService.clean(user.getEmail());
+
+        assertNull(result);
     }
 
     private Cart prepareCart() {
@@ -147,9 +180,14 @@ class CartServiceTest {
                 prepareProduct(),
                 prepareProduct()
         );
+        Random random = new Random();
         return allProducts
                 .stream()
                 .map(ProductInOrder::new)
+                .filter(x -> {
+                    x.setId(Math.abs(random.nextLong() + 100));
+                    return true;
+                })
                 .collect(Collectors.toList());
     }
 

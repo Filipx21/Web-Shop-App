@@ -121,11 +121,14 @@
         <version>${jacoco.maven.plugin}</version>
         <configuration>
           <excludes>
-            <exclude>pl/filip/webShop/model/*.class</exclude>
-            <exclude>pl/filip/webShop/repositories/*.class</exclude>
-            <exclude>pl/filip/webShop/constraints/*.class</exclude>
-            <exclude>pl/filip/webShop/dto/*.class</exclude>
-            <exclude>pl/filip/webShop/mapper/*.class</exclude>
+            <exclude>pl/filip/shop/config/*.class</exclude>
+            <exclude>pl/filip/shop/constraint/*.class</exclude>
+            <exclude>pl/filip/shop/controllers/*.class</exclude>
+            <exclude>pl/filip/shop/dto/*.class</exclude>
+            <exclude>pl/filip/shop/mapper/*.class</exclude>
+            <exclude>pl/filip/shop/model/*.class</exclude>
+            <exclude>pl/filip/shop/repositories/*.class</exclude>
+            <exclude>pl/filip/shop/security/*.class</exclude>
           </excludes>
         </configuration>
         <executions>
@@ -156,11 +159,6 @@
                       <counter>LINE</counter>
                       <value>COVEREDRATIO</value>
                       <minimum>0.80</minimum>
-                    </limit>
-                    <limit>
-                      <counter>BRANCH</counter>
-                      <value>COVEREDRATIO</value>
-                      <minimum>0.50</minimum>
                     </limit>
                   </limits>
                 </rule>

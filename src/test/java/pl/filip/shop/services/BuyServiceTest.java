@@ -6,6 +6,10 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.opentest4j.AssertionFailedError;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 
 import pl.filip.shop.model.Cart;
 import pl.filip.shop.model.OrderUser;
@@ -15,7 +19,6 @@ import pl.filip.shop.model.Category;
 import pl.filip.shop.model.Producer;
 import pl.filip.shop.model.Role;
 import pl.filip.shop.model.Product;
-
 import pl.filip.shop.repositories.CartRepository;
 import pl.filip.shop.repositories.OrderUserRepository;
 import pl.filip.shop.repositories.ProductRepository;
@@ -23,18 +26,18 @@ import pl.filip.shop.repositories.SysUserRepository;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.Random;
 import java.util.stream.Collectors;
 import java.util.Collection;
+import java.util.Collections;
 
-import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -79,6 +82,18 @@ class BuyServiceTest {
     }
 
     @Test
+    void shouldThrowNullSendRequest() throws NullPointerException {
+        OrderUser orderUser = prepareOrderUser();
+
+        orderUser.setId(1L);
+        when(orderUserRepository.findById(
+                orderUser.getId())).thenReturn(Optional.empty());
+        assertThrows(NullPointerException.class, () ->
+                buyService.send(orderUser.getId())
+        );
+    }
+
+    @Test
     void shouldFindAllNotSent() {
         List<OrderUser> allOrderUser = List.of(
             prepareOrderUser(),
@@ -90,7 +105,7 @@ class BuyServiceTest {
 
         when(orderUserRepository.findAllByFinish(false))
                 .thenReturn(allOrderUser);
-        List<OrderUser> result =  buyService.findAllNotSent();
+        List<OrderUser> result = buyService.findAllNotSent();
         assertEquals(allOrderUser, result);
     }
 
@@ -132,79 +147,172 @@ class BuyServiceTest {
     }
 
     @Test
+    void shouldNullCartBuyAllProductsFromCart() {
+        SysUser user = prepareUser();
+        List<Cart> carts = new ArrayList<>();
+
+        when(userRepository.findByEmail(user.getEmail())).thenReturn(Optional.of(user));
+        when(cartRepository.findAllBySysUserAndInUse(user, true)).thenReturn(carts);
+
+        OrderUser result = buyService.buyAllProductsFromCart(user.getEmail());
+
+        assertNull(result);
+    }
+
+    @Test
+    void shouldThrowIndexOutBuyAllProductsFromCart() {
+        SysUser user = prepareUser();
+        List<Cart> carts = List.of(
+                prepareCart(),
+                prepareCart(),
+                prepareCart()
+        );
+
+        when(userRepository.findByEmail(user.getEmail())).thenReturn(Optional.of(user));
+        when(cartRepository.findAllBySysUserAndInUse(user, true)).thenReturn(carts);
+
+        assertThrows(IndexOutOfBoundsException.class, () ->
+                buyService.buyAllProductsFromCart(user.getEmail())
+        );
+    }
+
+    @Test
     void shouldBuyAllProductsFromCart() {
         SysUser user = prepareUser();
-        Cart cart = prepareCart();
-        cart.setSysUser(user);
-        cart.setInUse(true);
-        List<ProductInOrder> allProducts = prepareProductInOrder();
-        List<Cart> carts = List.of(cart);
+        List<Cart> carts = List.of(prepareCart());
+        Cart cart = carts.get(0);
         OrderUser order = prepareOrderUser();
+        order.setId(null);
         order.setSysUser(user);
-        order.setProductInOrders(allProducts);
+        order.setProductInOrders(cart.getProducts());
         order.setDone(true);
         order.setFinish(false);
-
-
 
         when(userRepository.findByEmail(user.getEmail())).thenReturn(Optional.of(user));
         when(cartRepository.findAllBySysUserAndInUse(user, true)).thenReturn(carts);
         when(cartRepository.save(cart)).thenReturn(cart);
         when(orderUserRepository.save(order)).thenReturn(order);
 
-        System.out.println(order);
+        OrderUser result = buyService.buyAllProductsFromCart(user.getEmail());
 
-
-
-        assertEquals(order.getSysUser().getId(), buyService.buyAllProductsFromCart(user.getEmail()));
-    }
-
-    /*
-    public OrderUser buyAllProductsFromCart(String user_email) {
-        SysUser user = findUser(user_email);
-        List<Cart> carts = cartRepository.findAllBySysUserAndInUse(user, true);
-        if (carts.isEmpty()) {
-            return null;
-        }
-        if (carts.size() != 1) {
-            throw new IndexOutOfBoundsException(LocalDate.now()
-                    + ": Error occurred while searching the cart. Too many carts");
-        }
-        Cart cart = carts.get(0);
-        List<ProductInOrder> products = new ArrayList<>(cart.getProducts());
-        cart.setInUse(false);
-        cartRepository.save(cart);
-        return saveOrder(user, products);
-
-        private OrderUser saveOrder(SysUser user, List<ProductInOrder> products) {
-        OrderUser order = new OrderUser();
-        order.setSysUser(user);
-        order.setProductInOrders(products);
-        order.setDone(true);
-        order.setFinish(false);
-        return orderUserRepository.save(order);
-    }
-    }
-     */
-
-    @Test
-    void shouldNotBuyAllProductsFromCart() {
+        assertEquals(order, result);
     }
 
     @Test
     void shouldBuyProduct() {
+        Product product = prepareProduct();
+        SysUser user = prepareUser();
+        List<ProductInOrder> products = List.of(new ProductInOrder(product));
+        OrderUser order = prepareOrderUser();
+        order.setId(null);
+        order.setSysUser(user);
+        order.setProductInOrders(products);
+
+        when(productRepository.findById(product.getId())).thenReturn(Optional.of(product));
+        when(userRepository.findByEmail(user.getEmail())).thenReturn(Optional.of(user));
+        when(orderUserRepository.save(order)).thenReturn(order);
+
+        OrderUser result = buyService.buyProduct(user.getEmail(), product.getId());
+
+        assertEquals(order, result);
     }
 
     @Test
     void shouldNotBuyProduct() {
+        Product product = prepareProduct();
+        SysUser user = prepareUser();
+        List<ProductInOrder> products = List.of(new ProductInOrder(product));
+        OrderUser order = prepareOrderUser();
+        order.setId(null);
+        order.setSysUser(user);
+        order.setProductInOrders(products);
+
+        when(productRepository.findById(product.getId())).thenReturn(Optional.of(product));
+        when(userRepository.findByEmail(user.getEmail())).thenReturn(Optional.of(user));
+        when(orderUserRepository.save(order)).thenThrow(NullPointerException.class);
+
+        assertThrows(NullPointerException.class, () ->
+                buyService.buyProduct(user.getEmail(), product.getId())
+        );
+    }
+
+    @Test
+    void shouldThrowNullForProductBuyProduct() {
+        Product product = prepareProduct();
+
+        when(productRepository.findById(product.getId())).thenReturn(Optional.empty());
+
+        assertThrows(NullPointerException.class, () ->
+                buyService.buyProduct("test@gmail.com", product.getId())
+        );
+    }
+
+    @Test
+    void shouldThrowNullForUserBuyProduct() {
+        Product product = prepareProduct();
+        SysUser user = prepareUser();
+
+        when(productRepository.findById(product.getId())).thenReturn(Optional.of(product));
+        when(userRepository.findByEmail(user.getEmail())).thenReturn(Optional.empty());
+
+        assertThrows(NullPointerException.class, () ->
+                buyService.buyProduct(user.getEmail(), product.getId())
+        );
     }
 
     @Test
     void shouldFindAllOrders() {
+        SysUser user = prepareUser();
+        List<OrderUser> orders = List.of(
+                prepareOrderUser(),
+                prepareOrderUser(),
+                prepareOrderUser(),
+                prepareOrderUser()
+        );
+        orders.forEach(x -> x.setSysUser(user));
+        Pageable pageable = PageRequest.of(1, 1);
+
+        when(userRepository.findByEmail(user.getEmail())).thenReturn(Optional.of(user));
+        when(orderUserRepository.findAllBySysUser(user)).thenReturn(orders);
+
+        Page<OrderUser> result = buyService.findAllOrders(user.getEmail(), pageable);
+
+        Page page = fillPage(pageable, orders);
+        assertEquals(page, result);
     }
 
     @Test
     void shouldNotFindAllOrders() {
+        SysUser user = prepareUser();
+        List<OrderUser> orders = List.of();
+        orders.stream()
+                .sorted(Collections.reverseOrder())
+                .forEach(x -> x.setSysUser(user));
+        Pageable pageable = PageRequest.of(1, 1);
+
+        when(userRepository.findByEmail(user.getEmail())).thenReturn(Optional.of(user));
+        when(orderUserRepository.findAllBySysUser(user)).thenReturn(orders);
+
+        Page<OrderUser> result = buyService.findAllOrders(user.getEmail(), pageable);
+        Page page = fillPage(pageable, orders);
+        assertEquals(page, result);
+    }
+
+    private Page<OrderUser> fillPage(Pageable pageable, List<OrderUser> ordersList) {
+        var pageSize = pageable.getPageSize();
+        int currentPage = pageable.getPageNumber();
+        int startItem = pageSize * currentPage;
+        List<OrderUser> orders;
+        if (ordersList.size() < startItem) {
+            orders = Collections.emptyList();
+        } else {
+            int index = Math.min(startItem + pageSize,
+                    ordersList.size());
+            orders = ordersList.subList(startItem, index);
+        }
+        return new PageImpl<>(orders,
+                PageRequest.of(currentPage, pageSize),
+                ordersList.size());
     }
 
     private Cart prepareCart() {
@@ -250,7 +358,7 @@ class BuyServiceTest {
         String[] names = new String[]{"Rower", "Rolki", "Myszka",
                 "Garnek", "Kawa", "Woda", "Sol", "Lampa", "Posciel"};
         Product product = new Product();
-        product.setId(random.nextLong() + 100);
+        product.setId(Math.abs(random.nextLong() + 100));
         product.setProductName(names[random.nextInt(8)]);
         product.setDescript(names[random.nextInt(8)]);
         product.setQuantity(random.nextInt(100) + 1);

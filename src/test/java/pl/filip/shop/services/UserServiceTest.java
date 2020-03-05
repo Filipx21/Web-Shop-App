@@ -7,6 +7,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+
 import pl.filip.shop.dto.PasswordUserDto;
 import pl.filip.shop.dto.UserDto;
 import pl.filip.shop.model.Role;
@@ -23,7 +24,6 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertFalse;
-
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -73,22 +73,6 @@ class UserServiceTest {
     }
 
     @Test
-    void shouldSave() {
-//        SysUser user = prepareUser();
-//        user.setRoles(Collections.singletonList(new Role("ROLE_USER")));
-//        user.setInUse(true);
-//        UserDto userDto = prepareUserDto(user);
-//
-//        when(userRepository.save(user)).thenReturn(user);
-//
-//        SysUser result = userService.save(userDto);
-//
-//        System.out.println(result);
-//
-//        assertEquals(user, result);
-    }
-
-    @Test
     void shouldLoadUserByUsername() {
         SysUser user = prepareUser();
 
@@ -120,22 +104,6 @@ class UserServiceTest {
         assertThrows(UsernameNotFoundException.class, () ->
                 userService.loadUserByUsername(user.getEmail())
         ) ;
-    }
-
-    @Test
-    void shouldEditPassword() {
-//        PasswordUserDto passwordUserDto = new PasswordUserDto();
-//        passwordUserDto.setPassword("superMocneHaslo22");
-//        SysUser user = prepareUser();
-//
-//        when(userRepository.findByEmail(user.getEmail())).thenReturn(Optional.of(user));
-//        when(userRepository.save(user)).thenReturn(user);
-//
-//        user.setPassword(encoder.encode(passwordUserDto.getPassword()));
-//
-//        SysUser result = userService.editPassword(user.getEmail(), passwordUserDto);
-//
-//        assertEquals(user, result);
     }
 
     @Test

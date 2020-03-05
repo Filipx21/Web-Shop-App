@@ -64,6 +64,7 @@ public class CartService {
                     .stream()
                     .filter(product -> !product.getId().equals(id))
                     .collect(Collectors.toList());
+
             cart.setProducts(products);
             return cartRepository.save(cart);
         } catch (NullPointerException | IndexOutOfBoundsException ex) {

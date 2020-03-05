@@ -9,6 +9,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+
 import pl.filip.shop.model.Category;
 import pl.filip.shop.model.Producer;
 import pl.filip.shop.model.Product;

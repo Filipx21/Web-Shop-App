@@ -17,6 +17,7 @@ import pl.filip.shop.services.ProductService;
 
 import javax.validation.Valid;
 import java.security.Principal;
+import java.util.Collections;
 import java.util.List;
 
 @Controller
@@ -99,6 +100,7 @@ public class AdministratorController {
     @GetMapping("/administrator/orders")
     public String getAllOrders(Model model) {
         List<OrderUser> orders = buyService.findAllNotSent();
+        Collections.reverse(orders);
         model.addAttribute("orders", orders);
         return "users_orders";
     }
@@ -106,6 +108,7 @@ public class AdministratorController {
     @GetMapping("/administrator/sent_orders")
     public String getOrders(Model model) {
         List<OrderUser> orders = buyService.findAllSent();
+        Collections.reverse(orders);
         model.addAttribute("orders", orders);
         return "users_orders";
     }
