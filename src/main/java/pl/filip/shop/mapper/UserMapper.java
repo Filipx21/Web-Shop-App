@@ -3,6 +3,8 @@ package pl.filip.shop.mapper;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Mappings;
+import pl.filip.shop.dto.UserDetailsDto;
+import pl.filip.shop.dto.UserDto;
 import pl.filip.shop.model.SysUser;
 import pl.filip.shop.dto.EditUserDto;
 
@@ -26,5 +28,17 @@ public interface UserMapper {
             @Mapping(target = "postCode", source = "editUserDto.postCode"),
             @Mapping(target = "city", source = "editUserDto.city")})
     SysUser toUser(EditUserDto editUserDto);
+
+    @Mappings({
+            @Mapping(target = "id", source = "sysUser.id"),
+            @Mapping(target = "firstName", source = "sysUser.firstName"),
+            @Mapping(target = "lastName", source = "sysUser.lastName"),
+            @Mapping(target = "address", source = "sysUser.address"),
+            @Mapping(target = "postCode", source = "sysUser.postCode"),
+            @Mapping(target = "city", source = "sysUser.city"),
+            @Mapping(target = "password", source = "sysUser.password"),
+            @Mapping(target = "email", source = "sysUser.email"),
+            @Mapping(target = "inUse", source = "sysUser.inUse")})
+    UserDetailsDto toUserDto(SysUser sysUser);
 
 }

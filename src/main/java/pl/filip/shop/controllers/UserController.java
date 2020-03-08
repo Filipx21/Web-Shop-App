@@ -9,11 +9,12 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+
 import pl.filip.shop.dto.EditUserDto;
 import pl.filip.shop.dto.PasswordUserDto;
+import pl.filip.shop.dto.UserDetailsDto;
 import pl.filip.shop.dto.UserDto;
 import pl.filip.shop.mapper.UserMapper;
-import pl.filip.shop.model.SysUser;
 import pl.filip.shop.services.BuyService;
 import pl.filip.shop.services.UserService;
 
@@ -56,14 +57,12 @@ public class UserController {
     @PostMapping("/registration")
     public String registerUserAccount(@Valid @ModelAttribute("user") UserDto userDto,
                                       BindingResult result){
-        SysUser existingEmail = userService.findByEmail(userDto.getEmail());
-        if (existingEmail != null){
+        if (userService.findByEmail(userDto.getEmail()).getEmail() != null){
             result.rejectValue("email", null, "Juz istnieje taki adres email");
         }
         if (result.hasErrors()){
             return "registration";
         }
-
         userService.save(userDto);
         return "redirect:/login";
     }
@@ -71,16 +70,16 @@ public class UserController {
     @GetMapping("/information")
     public String userInformation(Model model, Principal principal) {
         String email = principal.getName();
-        SysUser sysUser = userService.findByEmail(email);
+        UserDetailsDto sysUser = userMapper.toUserDto(userService.findByEmail(email));
         model.addAttribute("user", sysUser);
         return "information";
     }
 
     @GetMapping("/edit_user")
     public String editProduct(Model model, Principal principal) {
-        SysUser object = userService.findByEmail(principal.getName());
-        if (object != null) {
-            model.addAttribute("user", userMapper.toEditUser(object));
+        EditUserDto sysUser = userMapper.toEditUser(userService.findByEmail(principal.getName()));
+        if (sysUser != null) {
+            model.addAttribute("user", sysUser);
             return "edit_user.html";
         }
         return "not_found.html";

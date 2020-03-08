@@ -1,5 +1,6 @@
 package pl.filip.shop.services;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -7,17 +8,14 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import pl.filip.shop.model.Category;
-import pl.filip.shop.model.Producer;
 import pl.filip.shop.model.Product;
 import pl.filip.shop.repositories.CategoryRepository;
 import pl.filip.shop.repositories.ProductRepository;
+import pl.filip.shop.resource.DataTest;
 
-import java.math.BigDecimal;
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.Random;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -36,13 +34,20 @@ class CategoryServiceTest {
     @InjectMocks
     CategoryService categoryService;
 
+    private DataTest dataTest;
+
+    @BeforeEach
+    void init() {
+        dataTest = new DataTest();
+    }
+
     @Test
     void shouldFindAll() throws NullPointerException {
         List<Category> categories = new ArrayList<>();
-        categories.add(prepareCategory());
-        categories.add(prepareCategory());
-        categories.add(prepareCategory());
-        categories.add(prepareCategory());
+        categories.add(dataTest.prepareCategory());
+        categories.add(dataTest.prepareCategory());
+        categories.add(dataTest.prepareCategory());
+        categories.add(dataTest.prepareCategory());
 
         when(categoryRepository.findAll()).thenReturn(categories);
 
@@ -64,7 +69,7 @@ class CategoryServiceTest {
 
     @Test
     void shouldFindCategoryById() throws NullPointerException {
-        Category category = prepareCategory();
+        Category category = dataTest.prepareCategory();
 
         when(categoryRepository.findById(category.getId())).thenReturn(Optional.of(category));
 
@@ -75,7 +80,7 @@ class CategoryServiceTest {
 
     @Test
     void shouldNotFindCategoryById() throws NullPointerException {
-        Category category = prepareCategory();
+        Category category = dataTest.prepareCategory();
 
         when(categoryRepository.findById(category.getId())).thenReturn(null);
 
@@ -86,7 +91,7 @@ class CategoryServiceTest {
 
     @Test
     void shouldSaveCategory() throws NullPointerException {
-        Category category = prepareCategory();
+        Category category = dataTest.prepareCategory();
 
         when(categoryRepository.save(category)).thenReturn(category);
 
@@ -97,7 +102,7 @@ class CategoryServiceTest {
 
     @Test
     void shouldNotSaveCategory() throws NullPointerException {
-        Category category = prepareCategory();
+        Category category = dataTest.prepareCategory();
 
         when(categoryRepository.save(category)).thenReturn(null);
 
@@ -117,7 +122,7 @@ class CategoryServiceTest {
 
     @Test
     void shouldThrowNullPointerSaveCategoryIsEmpty() throws NullPointerException {
-        Category category = prepareCategory();
+        Category category = dataTest.prepareCategory();
         category.setCategory(null);
 
         assertThrows(NullPointerException.class, () ->
@@ -127,7 +132,7 @@ class CategoryServiceTest {
 
     @Test
     void shouldDeteleById() throws NullPointerException {
-        Category category = prepareCategory();
+        Category category = dataTest.prepareCategory();
         List<Product> products = new ArrayList<>();
 
         when(categoryRepository.findById(category.getId())).thenReturn(Optional.of(category));
@@ -140,9 +145,9 @@ class CategoryServiceTest {
 
     @Test
     void shouldNotDeteleById() throws NullPointerException {
-        Category category = prepareCategory();
+        Category category = dataTest.prepareCategory();
         List<Product> products = new ArrayList<>();
-        products.add(prepareProduct());
+        products.add(dataTest.prepareProduct());
 
         when(categoryRepository.findById(category.getId())).thenReturn(Optional.of(category));
         when(productRepository.findAllByCategory(category)).thenReturn(products);
@@ -154,52 +159,12 @@ class CategoryServiceTest {
 
     @Test
     void shouldThrowNullPointerDeteleById() throws NullPointerException {
-        Category category = prepareCategory();
+        Category category = dataTest.prepareCategory();
 
         when(categoryRepository.findById(category.getId())).thenReturn(null);
 
         assertThrows(NullPointerException.class, () ->
                 categoryService.delete(category.getId())
         );
-    }
-
-    private Product prepareProduct() {
-        Random random = new Random();
-        Product product = new Product();
-        String[] names = new String[]{"Rower", "Rolki", "Myszka",
-                "Garnek", "Kawa", "Woda", "Sol", "Lampa", "Posciel"};
-        product.setId(random.nextLong() + 100);
-        product.setProductName(names[random.nextInt(8)]);
-        product.setDescript(names[random.nextInt(8)]);
-        product.setQuantity(random.nextInt(100) + 1);
-        product.setCost(new BigDecimal(random.nextDouble() * 100 + 1));
-        product.setProducer(preapreProducer());
-        product.setCategory(prepareCategory());
-        product.setCreatedDate(LocalDate.now());
-        return product;
-    }
-
-    private Producer preapreProducer() {
-        Random random = new Random();
-        Producer producer = new Producer();
-        String[] names = new String[]{"PCC", "Wapniaki", "JA", "Mavos",
-                "Intermodal", "DCOM", "Oldb", "Michalki", "Test"};
-        String[] addresses = new String[]{"Ruska 55", "Kamien 2", "Wroclaw 44",
-                "Warszawa 555", "Wilcza 43", "sfdfsd 34", "Testowa 33",
-                "Testowa 22", "Testowa 13"};
-        producer.setId(random.nextLong() + 100);
-        producer.setProducerName(names[random.nextInt(8)]);
-        producer.setAddress(addresses[random.nextInt(8)]);
-        return producer;
-    }
-
-    private Category prepareCategory() {
-        Random random = new Random();
-        Category category = new Category();
-        String[] categories = new String[]{"AGD", "RTV", "Sport", "Gaming",
-                "Kuchnia"};
-        category.setId(random.nextLong() + 100);
-        category.setCategory(categories[random.nextInt(5)]);
-        return category;
     }
 }
