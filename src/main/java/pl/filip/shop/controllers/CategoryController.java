@@ -7,19 +7,24 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+
 import pl.filip.shop.dto.CategoryDto;
-import pl.filip.shop.model.Category;
+import pl.filip.shop.mapper.CategoryMapper;
 import pl.filip.shop.services.CategoryService;
 
 import javax.validation.Valid;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Controller
 public class CategoryController {
 
     private CategoryService categoryService;
+    private CategoryMapper categoryMapper;
 
-    public CategoryController(CategoryService categoryService) {
+    public CategoryController(CategoryService categoryService, CategoryMapper categoryMapper) {
         this.categoryService = categoryService;
+        this.categoryMapper = categoryMapper;
     }
 
     @GetMapping("/administrator/category")
@@ -33,9 +38,8 @@ public class CategoryController {
         if (result.hasErrors()){
             return "new_category";
         }
-        Category newCat = new Category(category.getCategory());
-        Category cat = categoryService.save(newCat);
-        if(cat != null) {
+        if(category != null) {
+            categoryService.save(categoryMapper.toCategory(category));
             return "redirect:/administrator";
         }
         return "not_found";
@@ -43,13 +47,17 @@ public class CategoryController {
 
     @GetMapping("/administrator/categories")
     public String categories(Model model){
-        model.addAttribute("categories", categoryService.findAll());
+        List<CategoryDto> categories = categoryService.findAll()
+                .stream()
+                .map(x -> categoryMapper.toCategoryDto(x))
+                .collect(Collectors.toList());
+        model.addAttribute("categories", categories);
         return "categories";
     }
 
     @GetMapping("/administrator/categories/delete/{id}")
     public String categories(@PathVariable("id") Long id){
-        Category deleted = categoryService.delete(id);
+        CategoryDto category = categoryMapper.toCategoryDto(categoryService.delete(id));
         return "redirect:/administrator/categories";
     }
 

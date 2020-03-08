@@ -1,5 +1,6 @@
 package pl.filip.shop.services;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -9,16 +10,13 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
 import pl.filip.shop.dto.PasswordUserDto;
-import pl.filip.shop.dto.UserDto;
-import pl.filip.shop.model.Role;
 import pl.filip.shop.model.SysUser;
 import pl.filip.shop.repositories.SysUserRepository;
+import pl.filip.shop.resource.DataTest;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.Random;
-import java.util.Collection;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -29,16 +27,22 @@ import static org.mockito.Mockito.when;
 @ExtendWith(MockitoExtension.class)
 class UserServiceTest {
 
-
     @Mock
     SysUserRepository userRepository;
 
     @InjectMocks
     UserService userService;
 
+    private DataTest dataTest;
+
+    @BeforeEach
+    void init() {
+        dataTest = new DataTest();
+    }
+
     @Test
     void shouldFindByEmail() throws NullPointerException {
-        SysUser user = prepareUser();
+        SysUser user = dataTest.prepareUser();
 
         when(userRepository.findByEmail(user.getEmail())).thenReturn(Optional.of(user));
 
@@ -49,7 +53,7 @@ class UserServiceTest {
 
     @Test
     void shouldThrowNullPointerFindByEmail() throws NullPointerException {
-        SysUser user = prepareUser();
+        SysUser user = dataTest.prepareUser();
 
         when(userRepository.findByEmail(user.getEmail())).thenThrow(NullPointerException.class);
 
@@ -60,7 +64,7 @@ class UserServiceTest {
 
     @Test
     void shouldEditUser() {
-        SysUser user = prepareUser();
+        SysUser user = dataTest.prepareUser();
 
         when(userRepository.findByEmail(user.getEmail())).thenReturn(Optional.of(user));
         user.setCity("Krakow");
@@ -74,7 +78,7 @@ class UserServiceTest {
 
     @Test
     void shouldLoadUserByUsername() {
-        SysUser user = prepareUser();
+        SysUser user = dataTest.prepareUser();
 
         when(userRepository.findByEmail(user.getEmail())).thenReturn(Optional.of(user));
 
@@ -85,7 +89,7 @@ class UserServiceTest {
 
     @Test
     void shouldThrowExeptionLoadUserByUsername() {
-        SysUser user = prepareUser();
+        SysUser user = dataTest.prepareUser();
         user.setInUse(false);
 
         when(userRepository.findByEmail(user.getEmail())).thenReturn(Optional.of(user));
@@ -97,7 +101,7 @@ class UserServiceTest {
 
     @Test
     void shouldNotFindThrowExceptionLoadUserByUsername() {
-        SysUser user = prepareUser();
+        SysUser user = dataTest.prepareUser();
 
         when(userRepository.findByEmail(user.getEmail())).thenReturn(Optional.empty());
 
@@ -108,7 +112,7 @@ class UserServiceTest {
 
     @Test
     void shouldNotEditPassword() {
-        SysUser user = prepareUser();
+        SysUser user = dataTest.prepareUser();
 
         when(userRepository.findByEmail(user.getEmail())).thenReturn(Optional.empty());
 
@@ -119,7 +123,7 @@ class UserServiceTest {
 
     @Test
     void shouldDeleteAcc() {
-        SysUser user = prepareUser();
+        SysUser user = dataTest.prepareUser();
 
         when(userRepository.findById(user.getId())).thenReturn(Optional.of(user));
         when(userRepository.save(user)).thenReturn(user);
@@ -129,7 +133,7 @@ class UserServiceTest {
 
     @Test
     void shouldNotDeleteAcc() {
-        SysUser user = prepareUser();
+        SysUser user = dataTest.prepareUser();
 
         when(userRepository.findById(user.getId())).thenReturn(Optional.empty());
 
@@ -138,7 +142,7 @@ class UserServiceTest {
 
     @Test
     void shouldBlockAcc() {
-        SysUser user = prepareUser();
+        SysUser user = dataTest.prepareUser();
 
         when(userRepository.findById(user.getId())).thenReturn(Optional.of(user));
         when(userRepository.save(user)).thenReturn(user);
@@ -150,7 +154,7 @@ class UserServiceTest {
 
     @Test
     void shouldNotBlockAcc() {
-        SysUser user = prepareUser();
+        SysUser user = dataTest.prepareUser();
 
         when(userRepository.findById(user.getId())).thenReturn(Optional.empty());
 
@@ -162,10 +166,10 @@ class UserServiceTest {
     @Test
     void shouldFindAll() {
         List<SysUser> users = List.of(
-                prepareUser(),
-                prepareUser(),
-                prepareUser(),
-                prepareUser()
+                dataTest.prepareUser(),
+                dataTest.prepareUser(),
+                dataTest.prepareUser(),
+                dataTest.prepareUser()
         );
 
         when(userRepository.findAll()).thenReturn(users);
@@ -186,52 +190,4 @@ class UserServiceTest {
         assertEquals(users, result);
     }
 
-    private UserDto prepareUserDto(SysUser user){
-        UserDto userDto = new UserDto();
-
-        userDto.setId(user.getId());
-        userDto.setFirstName(user.getFirstName());
-        userDto.setLastName(user.getLastName());
-        userDto.setAddress(user.getAddress());
-        userDto.setPostCode(user.getPostCode());
-        userDto.setCity(user.getCity());
-        userDto.setEmail(user.getEmail());
-        userDto.setPassword(user.getPassword());
-
-        return userDto;
-    }
-
-    private SysUser prepareUser() {
-        SysUser user = new SysUser();
-        Random random = new Random();
-        String[] firstNames = new String[] {"Eustachy","Gienia","Ewelina","Kornel","Bartek"};
-        String[] lastNames = new String[] {"Kwadrat","Giwera","Maven","Konik","Ura"};
-        String[] addresses = new String[] {"Kornicza 2","Ernesta 33","Mavena 3","Konika 66","Orki 99"};
-        String[] cities = new String[] {"Wroclaw","Warszawa","Gdansk","Gdynia","Zakopane"};
-        String[] emails = new String[] {"test1@gmail.com","test2@gmail.com","test3@gmail.com","test4@gmail.com","test5@gmail.com"};
-        Collection roles = new ArrayList();
-        roles.add(prepareRole());
-
-        user.setId(Long.valueOf(random.nextInt(1000)));
-        user.setFirstName(firstNames[random.nextInt(5)]);
-        user.setLastName(lastNames[random.nextInt(5)]);
-        user.setAddress(addresses[random.nextInt(5)]);
-        user.setPostCode("22-321");
-        user.setCity(cities[random.nextInt(5)]);
-        user.setEmail(emails[random.nextInt(5)]);
-        user.setPassword("123");
-        user.setInUse(true);
-        user.setRoles(roles);
-
-        return user;
-    }
-
-    private Role prepareRole() {
-        Role role = new Role();
-        String[] roles = new String[] {"ADMIN", "USER"};
-        Random random = new Random();
-        role.setId(Long.valueOf(random.nextInt(1000)));
-        role.setName(roles[random.nextInt(2)]);
-        return role;
-    }
 }

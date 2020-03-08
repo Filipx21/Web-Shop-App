@@ -1,28 +1,22 @@
 package pl.filip.shop.services;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 
 import pl.filip.shop.model.Category;
-import pl.filip.shop.model.Producer;
 import pl.filip.shop.model.Product;
+import pl.filip.shop.repositories.CategoryRepository;
 import pl.filip.shop.repositories.ProductRepository;
+import pl.filip.shop.resource.DataTest;
 
-import java.math.BigDecimal;
 import java.time.LocalDate;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.Random;
-import java.util.Collections;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -37,12 +31,22 @@ class ProductServiceTest {
     @Mock
     ProductRepository productRepository;
 
+    @Mock
+    CategoryRepository categoryRepository;
+
     @InjectMocks
     ProductService productService;
 
+    private DataTest dataTest;
+
+    @BeforeEach
+    void init() {
+        dataTest = new DataTest();
+    }
+
     @Test
     void shouldDeleteById() throws NullPointerException {
-        Product product = prepareProduct();
+        Product product = dataTest.prepareProduct();
 
         when(productRepository.findById(product.getId())).thenReturn(Optional.of(product));
 
@@ -51,7 +55,7 @@ class ProductServiceTest {
 
     @Test
     void shouldThrowNullPointerDeleteById() throws NullPointerException {
-        Product product = prepareProduct();
+        Product product = dataTest.prepareProduct();
 
         when(productRepository.findById(product.getId())).thenThrow(NullPointerException.class);
 
@@ -62,7 +66,7 @@ class ProductServiceTest {
 
     @Test
     void shouldFindNullAndThrowPointerDeleteById() throws NullPointerException {
-        Product product = prepareProduct();
+        Product product = dataTest.prepareProduct();
 
         when(productRepository.findById(product.getId())).thenReturn(null);
 
@@ -73,7 +77,7 @@ class ProductServiceTest {
 
     @Test
     void shouldSaveProduct() throws NullPointerException {
-        Product product = prepareProduct();
+        Product product = dataTest.prepareProduct();
 
         when(productRepository.save(product)).thenReturn(product);
 
@@ -93,7 +97,7 @@ class ProductServiceTest {
 
     @Test
     void shouldSetDate() throws NullPointerException {
-        Product product = prepareProduct();
+        Product product = dataTest.prepareProduct();
         product.setCreatedDate(null);
         Product expected = product;
         expected.setCreatedDate(LocalDate.now());
@@ -107,7 +111,7 @@ class ProductServiceTest {
 
     @Test
     void shouldReturnNullBadSave() throws NullPointerException {
-        Product product = prepareProduct();
+        Product product = dataTest.prepareProduct();
 
         when(productRepository.save(product)).thenReturn(null);
 
@@ -118,7 +122,7 @@ class ProductServiceTest {
 
     @Test
     void shouldFindById() throws NullPointerException {
-        Product product = prepareProduct();
+        Product product = dataTest.prepareProduct();
 
         when(productRepository.findById(product.getId())).thenReturn(Optional.of(product));
 
@@ -139,193 +143,132 @@ class ProductServiceTest {
     @Test
     void shouldFindPageWithProducts() throws NullPointerException {
         List<Product> products = new ArrayList<>();
-        products.add(prepareProduct());
-        products.add(prepareProduct());
-        products.add(prepareProduct());
-        products.add(prepareProduct());
-        Pageable pageable = PageRequest.of(1, 1);
-        Page page = fillPage(products, pageable);
+        products.add(dataTest.prepareProduct());
+        products.add(dataTest.prepareProduct());
+        products.add(dataTest.prepareProduct());
+        products.add(dataTest.prepareProduct());
 
         when(productRepository.findAll()).thenReturn(products);
 
-        Page<Product> productsPage = productService.findAllProduct(pageable);
+        List<Product> productsPage = productService.findAllProduct();
 
-        assertEquals(page, productsPage);
-        assertEquals(page.getContent().size(), productsPage.getContent().size());
-        assertEquals(page.getContent().get(0), productsPage.getContent().get(0));
+        assertEquals(products, productsPage);
+        assertEquals(products.size(), productsPage.size());
+        assertEquals(products.get(0), productsPage.get(0));
     }
+
 
     @Test
     void shouldThrowIndexOutWithProducts() throws NullPointerException {
         List<Product> products = new ArrayList<>();
-        products.add(prepareProduct());
-        products.add(prepareProduct());
-        products.add(prepareProduct());
-        products.add(prepareProduct());
-        Pageable pageable = PageRequest.of(1, 1);
-        Page page = fillPage(products, pageable);
+        products.add(dataTest.prepareProduct());
+        products.add(dataTest.prepareProduct());
+        products.add(dataTest.prepareProduct());
+        products.add(dataTest.prepareProduct());
 
         when(productRepository.findAll()).thenReturn(products);
 
-        Page<Product> productsPage = productService.findAllProduct(pageable);
+        List<Product> productsPage = productService.findAllProduct();
 
         assertThrows(IndexOutOfBoundsException.class, () ->
-                productsPage.getContent().get(1)
+                productsPage.get(10)
         );
     }
 
     @Test
     void shouldThrowNullPointerWithProducts() throws NullPointerException {
         List<Product> products = new ArrayList<>();
-        Pageable pageable = PageRequest.of(1, 1);
-        Page page = fillPage(products, pageable);
 
-        when(productRepository.findAll()).thenReturn(null);
+        when(productRepository.findAll()).thenThrow(NullPointerException.class);
 
         assertThrows(NullPointerException.class, () ->
-                productService.findAllProduct(pageable)
+                productService.findAllProduct()
         );
     }
 
     @Test
     void shouldFindAllByName() throws NullPointerException {
         List<Product> products = new ArrayList<>();
-        Product product = prepareProduct();
+        Product product = dataTest.prepareProduct();
         product.setProductName("Test");
         products.add(product);
         products.add(product);
         products.add(product);
         products.add(product);
-        Pageable pageable = PageRequest.of(1, 1);
-        Page page = fillPage(products, pageable);
 
         when(productRepository.findAllByProductName("Test")).thenReturn(products);
 
-        Page<Product> productsPage = productService.findProductsByName("Test", pageable);
+        List<Product> productsPage = productService.findProductsByName("Test");
 
-        assertEquals(page, productsPage);
-        assertEquals(page.getContent().size(), productsPage.getContent().size());
-        assertEquals(page.getContent().get(0), productsPage.getContent().get(0));
+        assertEquals(products, productsPage);
+        assertEquals(products.size(), productsPage.size());
+        assertEquals(products.get(0), productsPage.get(0));
     }
+
 
     @Test
     void shouldNotFindAllByName() throws NullPointerException {
         List<Product> products = new ArrayList<>();
-        products.add(prepareProduct());
-        products.add(prepareProduct());
-        products.add(prepareProduct());
-        products.add(prepareProduct());
-        Pageable pageable = PageRequest.of(1, 1);
-        Page page = fillPage(products, pageable);
+        products.add(dataTest.prepareProduct());
+        products.add(dataTest.prepareProduct());
+        products.add(dataTest.prepareProduct());
+        products.add(dataTest.prepareProduct());
         List<Product> empty = new ArrayList<>();
 
         when(productRepository.findAllByProductName("Test")).thenReturn(empty);
         when(productRepository.findAll()).thenReturn(products);
 
-        Page<Product> productsPage = productService.findProductsByName("Test", pageable);
+        List<Product> productsPage = productService.findProductsByName("Test");
 
-        assertEquals(page, productsPage);
-        assertEquals(page.getContent().size(), productsPage.getContent().size());
-        assertEquals(page.getContent().get(0), productsPage.getContent().get(0));
+        assertEquals(products, productsPage);
+        assertEquals(products.size(), productsPage.size());
+        assertEquals(products.get(0), productsPage.get(0));
     }
+
 
     @Test
     void shouldFindAllByCategory() throws NullPointerException {
         List<Product> products = new ArrayList<>();
-        Product product = prepareProduct();
-        product.setCategory(prepareCategory());
+        Product product = dataTest.prepareProduct();
+        product.setCategory(dataTest.prepareCategory());
         products.add(product);
         products.add(product);
         products.add(product);
         products.add(product);
-        Pageable pageable = PageRequest.of(1, 1);
-        Page page = fillPage(products, pageable);
 
+        when(categoryRepository.findById(product.getCategory().getId())).thenReturn(Optional.of(product.getCategory()));
         when(productRepository.findAllByCategory(product.getCategory())).thenReturn(products);
 
-        Page<Product> productsPage = productService.findProductsByCategory(product.getCategory(), pageable);
+        List<Product> productsPage = productService.findProductsByCategory(product.getCategory().getId());
 
-        assertEquals(page, productsPage);
-        assertEquals(page.getContent().size(), productsPage.getContent().size());
-        assertEquals(page.getContent().get(0), productsPage.getContent().get(0));
+        assertEquals(products, productsPage);
+        assertEquals(products.size(), productsPage.size());
+        assertEquals(products.get(0), productsPage.get(0));
     }
+
+
 
     @Test
     void shouldNotFindAllByCategory() throws NullPointerException {
         List<Product> products = new ArrayList<>();
-        Product product = prepareProduct();
-        product.setCategory(prepareCategory());
+        Product product = dataTest.prepareProduct();
+        Category category = dataTest.prepareCategory();
+        product.setCategory(dataTest.prepareCategory());
         products.add(product);
         products.add(product);
         products.add(product);
         products.add(product);
-        Pageable pageable = PageRequest.of(1, 1);
-        Page page = fillPage(products, pageable);
         List<Product> empty = new ArrayList<>();
 
-        when(productRepository.findAllByCategory(product.getCategory())).thenReturn(empty);
+        when(categoryRepository.findById(category.getId())).thenReturn(Optional.of(category));
+        when(productRepository.findAllByCategory(category)).thenReturn(empty);
         when(productRepository.findAll()).thenReturn(products);
 
-        Page<Product> productsPage = productService.findProductsByCategory(product.getCategory(), pageable);
+        List<Product> productsPage = productService.findProductsByCategory(category.getId());
 
-        assertEquals(page, productsPage);
-        assertEquals(page.getContent().size(), productsPage.getContent().size());
-        assertEquals(page.getContent().get(0), productsPage.getContent().get(0));
+        assertEquals(products, productsPage);
+        assertEquals(products.size(), productsPage.size());
+        assertEquals(products.get(0), productsPage.get(0));
     }
 
-    private Page<Product> fillPage(List<Product> productList, Pageable pageable) {
-        int page = pageable.getPageNumber();
-        int size = pageable.getPageSize();
-        int startItem = page * size;
-        List<Product> products;
-        if (productList.size() < startItem) {
-            products = Collections.emptyList();
-        } else {
-            int toIndex = Math.min(startItem + size, productList.size());
-            products = productList.subList(startItem, toIndex);
-        }
-        return new PageImpl<>(products,
-                PageRequest.of(page, size),
-                productList.size());
-    }
-
-    private Product prepareProduct() {
-        Random random = new Random();
-        String[] names = new String[]{"Rower", "Rolki", "Myszka",
-                "Garnek", "Kawa", "Woda", "Sol", "Lampa", "Posciel"};
-        Product product = new Product();
-        product.setId(random.nextLong() + 100);
-        product.setProductName(names[random.nextInt(8)]);
-        product.setDescript(names[random.nextInt(8)]);
-        product.setQuantity(random.nextInt(100) + 1);
-        product.setCost(new BigDecimal(random.nextDouble() * 100 + 1));
-        product.setProducer(preapreProducer());
-        product.setCategory(prepareCategory());
-        product.setCreatedDate(LocalDate.now());
-        return product;
-    }
-
-    private Producer preapreProducer() {
-        Producer producer = new Producer();
-        Random random = new Random();
-        String[] names = new String[]{"PCC", "Wapniaki", "JA", "Mavos",
-                "Intermodal", "DCOM", "Oldb", "Michalki", "Test"};
-        String[] addresses = new String[]{"Ruska 55", "Kamien 2", "Wroclaw 44",
-                "Warszawa 555", "Wilcza 43", "sfdfsd 34", "Testowa 33",
-                "Testowa 22", "Testowa 13"};
-        producer.setId(random.nextLong() + 100);
-        producer.setProducerName(names[random.nextInt(8)]);
-        producer.setAddress(addresses[random.nextInt(8)]);
-        return producer;
-    }
-
-    private Category prepareCategory() {
-        Category category = new Category();
-        Random random = new Random();
-        String[] categories = new String[]{"AGD", "RTV", "Sport", "Gaming",
-                "Kuchnia"};
-        category.setId(random.nextLong() + 100);
-        category.setCategory(categories[random.nextInt(5)]);
-        return category;
-    }
 }

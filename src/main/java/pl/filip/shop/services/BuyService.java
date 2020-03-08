@@ -5,6 +5,8 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import pl.filip.shop.dto.OrderUserDto;
+import pl.filip.shop.mapper.OrderUserMapper;
 import pl.filip.shop.model.*;
 import pl.filip.shop.repositories.CartRepository;
 import pl.filip.shop.repositories.OrderUserRepository;
@@ -89,26 +91,9 @@ public class BuyService {
         return saveOrder(user, products);
     }
 
-    public Page<OrderUser> findAllOrders(String user_email, Pageable pageable) {
+    public List<OrderUser> findAllOrders(String user_email) {
         SysUser user = findUser(user_email);
-        List<OrderUser> orders = orderUserRepository.findAllBySysUser(user);
-        return fillPage(orders, pageable);
-    }
-
-    private Page<OrderUser> fillPage(List<OrderUser> ordersList, Pageable pageable) {
-        int pageSize = pageable.getPageSize();
-        int currentPage = pageable.getPageNumber();
-        int startItem = currentPage * pageSize;
-        List<OrderUser> orders;
-        if (ordersList.size() < startItem) {
-            orders = Collections.emptyList();
-        } else {
-            int toIndex = Math.min(startItem + pageSize, ordersList.size());
-            orders = ordersList.subList(startItem, toIndex);
-        }
-        return new PageImpl<>(orders,
-                PageRequest.of(currentPage, pageSize),
-                ordersList.size());
+        return orderUserRepository.findAllBySysUser(user);
     }
 
     private OrderUser saveOrder(SysUser user, List<ProductInOrder> products) {
